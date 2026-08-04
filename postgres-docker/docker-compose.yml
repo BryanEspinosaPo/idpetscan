@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres-docker
+    restart: always
+    environment:
+      POSTGRES_USER: Master
+      POSTGRES_PASSWORD: Master205
+      POSTGRES_DB: idept
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
