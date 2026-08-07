@@ -122,7 +122,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Redirecciones de autenticación (se usan en la Fase 3)
 # --------------------------------------------------------------------
 LOGIN_URL = "accounts:login"
-LOGIN_REDIRECT_URL = "pets:my_pets"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 # --------------------------------------------------------------------

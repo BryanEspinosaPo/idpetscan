@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>IDPetScan</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+  {% if user.is_authenticated %}
+  <div style="padding:12px 24px;background:#0D1B2A;color:#fff;display:flex;justify-content:space-between;align-items:center;font-family:sans-serif;font-size:13px;">
+    <span>Conectado como <b>{{ user.username }}</b></span>
+    <form method="post" action="{% url 'accounts:logout' %}" style="margin:0;">
+      {% csrf_token %}
+      <button type="submit" style="background:none;border:1px solid #2ECCB3;color:#2ECCB3;padding:6px 14px;border-radius:6px;cursor:pointer;">Cerrar sesión</button>
+    </form>
+  </div>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+</body>
+</html>
