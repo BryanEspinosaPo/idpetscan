@@ -50,6 +50,7 @@ class Pet(models.Model):
     color = models.CharField(max_length=100, blank=True)
     size = models.CharField(max_length=50, blank=True)
     photo = models.ImageField(upload_to="pets/", blank=True, null=True)
+    qr_code = models.ImageField(upload_to="qr_codes/", blank=True, null=True)
 
     # --- Contacto del dueño ---
     contact_name = models.CharField(max_length=100)
