@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width:640px;margin:40px auto;padding:0 20px;font-family:'Montserrat',sans-serif;">
+  <h2 style="font-family:'Poppins',sans-serif;">Registra a tu mascota</h2>
+  <p style="color:#6B7686;font-size:13px;margin-bottom:24px;">
+    Este perfil quedará en revisión hasta que lo aprobemos — normalmente en menos de 24 horas.
+  </p>
+
+  {% if form.errors %}
+    <ul style="color:#E24B4A;font-size:13px;">
+      {% for field in form %}
+        {% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <h4 style="color:#0A3D62;text-transform:uppercase;font-size:12px;">🐾 Datos de la mascota</h4>
+    <p>{{ form.name.label }}<br>{{ form.name }}</p>
+    <p>{{ form.species.label }}<br>{{ form.species }}</p>
+    <p>{{ form.breed.label }}<br>{{ form.breed }}</p>
+    <p>{{ form.sex.label }}<br>{{ form.sex }}</p>
+    <p>{{ form.birth_date.label }}<br>{{ form.birth_date }}</p>
+    <p>{{ form.color.label }}<br>{{ form.color }}</p>
+    <p>{{ form.size.label }}<br>{{ form.size }}</p>
+    <p>{{ form.photo.label }}<br>{{ form.photo }}</p>
+
+    <h4 style="color:#0A3D62;text-transform:uppercase;font-size:12px;margin-top:24px;">📞 Contacto del dueño</h4>
+    <p>{{ form.contact_name.label }}<br>{{ form.contact_name }}</p>
+    <p>{{ form.contact_phone.label }}<br>{{ form.contact_phone }}</p>
+    <p>{{ form.contact_phone_alt.label }}<br>{{ form.contact_phone_alt }}</p>
+    <p>{{ form.contact_email.label }}<br>{{ form.contact_email }}</p>
+    <p>{{ form.zone.label }}<br>{{ form.zone }}</p>
+
+    <h4 style="color:#0A3D62;text-transform:uppercase;font-size:12px;margin-top:24px;">✚ Salud (opcional)</h4>
+    <p>{{ form.vaccines_ok.label }} {{ form.vaccines_ok }}</p>
+    <p>{{ form.neutered.label }} {{ form.neutered }}</p>
+    <p>{{ form.allergies.label }}<br>{{ form.allergies }}</p>
+    <p>{{ form.medical_conditions.label }}<br>{{ form.medical_conditions }}</p>
+    <p>{{ form.vet_name.label }}<br>{{ form.vet_name }}</p>
+    <p>{{ form.vet_phone.label }}<br>{{ form.vet_phone }}</p>
+
+    <button type="submit" style="background:linear-gradient(135deg,#00B3BB,#2ECCB3);color:#fff;border:none;border-radius:10px;padding:13px 22px;font-family:'Poppins';font-weight:600;margin-top:20px;cursor:pointer;">
+      Enviar para revisión
+    </button>
+  </form>
+</div>
+{% endblock %}
