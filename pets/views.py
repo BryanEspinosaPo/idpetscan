@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404
 
 from .forms import PetForm
+from .models import Pet
 
 
 @login_required
@@ -22,3 +24,9 @@ def create_pet_view(request):
 
 def pet_created_view(request, public_code):
     return render(request, "pets/pet_created.html", {"public_code": public_code})
+
+
+
+def public_profile_view(request, public_code):
+    pet = get_object_or_404(Pet, public_code=public_code, status="approved")
+    return render(request, "pets/public_profile.html", {"pet": pet})
