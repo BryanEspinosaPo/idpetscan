@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width:680px;margin:40px auto;padding:0 20px;font-family:'Montserrat',sans-serif;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <h2 style="font-family:'Poppins',sans-serif;margin:0;">Mis mascotas</h2>
+    <a href="{% url 'pets:create_pet' %}" style="background:linear-gradient(135deg,#00B3BB,#2ECCB3);color:#fff;text-decoration:none;border-radius:10px;padding:10px 18px;font-family:'Poppins';font-weight:600;font-size:13px;">
+      + Nueva mascota
+    </a>
+  </div>
+
+  {% if pets %}
+    {% for pet in pets %}
+    <div style="display:flex;align-items:center;gap:14px;background:#E6EAF0;border-radius:14px;padding:14px;margin-bottom:12px;">
+      {% if pet.photo %}
+        <img src="{{ pet.photo.url }}" style="width:56px;height:56px;border-radius:10px;object-fit:cover;">
+      {% else %}
+        <div style="width:56px;height:56px;border-radius:10px;background:#c9cfda;"></div>
+      {% endif %}
+
+      <div style="flex:1;">
+        <p style="font-weight:600;margin:0;">{{ pet.name }}</p>
+        <p style="font-size:12px;color:#6B7686;margin:2px 0 0;">{{ pet.get_species_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}</p>
+      </div>
+
+      <span style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:100px;
+        {% if pet.status == 'approved' %}background:#DCF5EE;color:#0C7A5F;
+        {% elif pet.status == 'pending' %}background:#FDF0DC;color:#A66A0A;
+        {% else %}background:#FCEBEB;color:#A32D2D;{% endif %}">
+        {{ pet.get_status_display }}
+      </span>
+
+      <a href="{% url 'pets:edit_pet' pet.pk %}" style="font-size:12px;color:#0A3D62;text-decoration:none;font-weight:600;">Editar</a>
+
+      {% if pet.status == 'approved' %}
+        <a href="{% url 'pets:public_profile' pet.public_code %}" style="font-size:12px;color:#00B3BB;text-decoration:none;font-weight:600;">Ver perfil</a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <p style="color:#6B7686;">Todavía no has registrado ninguna mascota.</p>
+  {% endif %}
+</div>
+{% endblock %}
