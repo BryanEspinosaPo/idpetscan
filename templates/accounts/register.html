@@ -3,32 +3,23 @@
 <div class="auth-wrapper">
   <div class="auth-side">
     <h2>IDPet<span>Scan</span></h2>
-    <p class="quote">"Desde que Rocky tiene su placa, cualquiera que lo encuentre me escribe en segundos."</p>
-    <p class="quote-author">Camila Rojas, dueña de Rocky</p>
+    <p class="quote">Registra a tu mascota y que cualquiera pueda contactarte si se pierde.</p>
   </div>
-
   <div class="auth-form">
-    <h2>Bienvenido de nuevo</h2>
-    <p class="sub">Ingresa a tu cuenta para gestionar los perfiles de tus mascotas.</p>
-
+    <h2>Crea tu cuenta</h2>
+    <p class="sub">Es gratis. Luego podrás registrar y gestionar tus mascotas.</p>
     {% if form.errors %}
-      <p class="error">Usuario o contraseña incorrectos.</p>
+      <ul class="error-list">{% for field in form %}{% for error in field.errors %}<li>{{ error }}</li>{% endfor %}{% endfor %}</ul>
     {% endif %}
-
     <form method="post">
       {% csrf_token %}
-      <div class="field">
-        <label>Usuario</label>
-        {{ form.username }}
-      </div>
-      <div class="field">
-        <label>Contraseña</label>
-        {{ form.password }}
-      </div>
-      <button type="submit" class="auth-btn">Ingresar</button>
+      <div class="field"><label>Usuario</label>{{ form.username }}</div>
+      <div class="field"><label>Correo electrónico</label>{{ form.email }}</div>
+      <div class="field"><label>Contraseña</label>{{ form.password1 }}</div>
+      <div class="field"><label>Confirmar contraseña</label>{{ form.password2 }}</div>
+      <button type="submit" class="auth-btn">Registrarme</button>
     </form>
-
-    <p class="auth-alt">¿No tienes cuenta? <a href="{% url 'accounts:register' %}">Regístrate gratis</a></p>
+    <p class="auth-alt">¿Ya tienes cuenta? <a href="{% url 'accounts:login' %}">Ingresa aquí</a></p>
   </div>
 </div>
 {% endblock %}

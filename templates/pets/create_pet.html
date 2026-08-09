@@ -1,50 +1,124 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="max-width:640px;margin:40px auto;padding:0 20px;font-family:'Montserrat',sans-serif;">
-  <h2 style="font-family:'Poppins',sans-serif;">Registra a tu mascota</h2>
-  <p style="color:#6B7686;font-size:13px;margin-bottom:24px;">
-    Este perfil quedará en revisión hasta que lo aprobemos — normalmente en menos de 24 horas.
-  </p>
+<div class="form-shell">
+  <div class="form-steps-bar">
+    <div class="step-dot done" data-step="1"></div>
+    <div class="step-dot" data-step="2"></div>
+    <div class="step-dot" data-step="3"></div>
+  </div>
+  <h2>Registra a tu mascota</h2>
+  <p class="sub">Este perfil quedará en revisión hasta que lo aprobemos — normalmente en menos de 24 horas.</p>
 
   {% if form.errors %}
-    <ul style="color:#E24B4A;font-size:13px;">
-      {% for field in form %}
-        {% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}
-      {% endfor %}
-    </ul>
+    <ul class="error-list">{% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}{% endfor %}</ul>
   {% endif %}
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+  <div class="form-card">
+    <form method="post" enctype="multipart/form-data" id="pet-form">
+      {% csrf_token %}
 
-    <h4 style="color:#0A3D62;text-transform:uppercase;font-size:12px;">🐾 Datos de la mascota</h4>
-    <p>{{ form.name.label }}<br>{{ form.name }}</p>
-    <p>{{ form.species.label }}<br>{{ form.species }}</p>
-    <p>{{ form.breed.label }}<br>{{ form.breed }}</p>
-    <p>{{ form.sex.label }}<br>{{ form.sex }}</p>
-    <p>{{ form.birth_date.label }}<br>{{ form.birth_date }}</p>
-    <p>{{ form.color.label }}<br>{{ form.color }}</p>
-    <p>{{ form.size.label }}<br>{{ form.size }}</p>
-    <p>{{ form.photo.label }}<br>{{ form.photo }}</p>
+      <!-- PASO 1: Datos de la mascota -->
+      <div class="form-step-panel active" data-panel="1">
+        <p class="form-section-title">🐾 Datos de la mascota</p>
 
-    <h4 style="color:#0A3D62;text-transform:uppercase;font-size:12px;margin-top:24px;">📞 Contacto del dueño</h4>
-    <p>{{ form.contact_name.label }}<br>{{ form.contact_name }}</p>
-    <p>{{ form.contact_phone.label }}<br>{{ form.contact_phone }}</p>
-    <p>{{ form.contact_phone_alt.label }}<br>{{ form.contact_phone_alt }}</p>
-    <p>{{ form.contact_email.label }}<br>{{ form.contact_email }}</p>
-    <p>{{ form.zone.label }}<br>{{ form.zone }}</p>
+        <div class="species-pills">
+          <div class="species-pill sel" data-value="dog">🐶 Perro</div>
+          <div class="species-pill" data-value="cat">🐱 Gato</div>
+          <div class="species-pill" data-value="other">🐦 Otro</div>
+        </div>
+        <div style="display:none;">{{ form.species }}</div>
 
-    <h4 style="color:#0A3D62;text-transform:uppercase;font-size:12px;margin-top:24px;">✚ Salud (opcional)</h4>
-    <p>{{ form.vaccines_ok.label }} {{ form.vaccines_ok }}</p>
-    <p>{{ form.neutered.label }} {{ form.neutered }}</p>
-    <p>{{ form.allergies.label }}<br>{{ form.allergies }}</p>
-    <p>{{ form.medical_conditions.label }}<br>{{ form.medical_conditions }}</p>
-    <p>{{ form.vet_name.label }}<br>{{ form.vet_name }}</p>
-    <p>{{ form.vet_phone.label }}<br>{{ form.vet_phone }}</p>
+        <div class="form-grid">
+          <p>{{ form.name.label }}<br>{{ form.name }}</p>
+          <p>{{ form.breed.label }}<br>{{ form.breed }}</p>
+          <p>{{ form.sex.label }}<br>{{ form.sex }}</p>
+          <p>{{ form.birth_date.label }}<br>{{ form.birth_date }}</p>
+          <p>{{ form.color.label }}<br>{{ form.color }}</p>
+          <p>{{ form.size.label }}<br>{{ form.size }}</p>
+        </div>
 
-    <button type="submit" style="background:linear-gradient(135deg,#00B3BB,#2ECCB3);color:#fff;border:none;border-radius:10px;padding:13px 22px;font-family:'Poppins';font-weight:600;margin-top:20px;cursor:pointer;">
-      Enviar para revisión
-    </button>
-  </form>
+        <label class="photo-drop" id="photo-drop">
+          <span id="photo-drop-text">Arrastra una foto o haz clic para subir</span>
+          {{ form.photo }}
+        </label>
+
+        <div class="form-nav-buttons">
+          <span></span>
+          <button type="button" class="btn btn-primary" onclick="goToStep(2)">Siguiente</button>
+        </div>
+      </div>
+
+      <!-- PASO 2: Contacto -->
+      <div class="form-step-panel" data-panel="2">
+        <p class="form-section-title">📞 Contacto del dueño</p>
+        <div class="form-grid">
+          <p>{{ form.contact_name.label }}<br>{{ form.contact_name }}</p>
+          <p>{{ form.contact_phone.label }}<br>{{ form.contact_phone }}</p>
+          <p>{{ form.contact_phone_alt.label }}<br>{{ form.contact_phone_alt }}</p>
+          <p>{{ form.contact_email.label }}<br>{{ form.contact_email }}</p>
+          <p class="full">{{ form.zone.label }}<br>{{ form.zone }}</p>
+        </div>
+        <div class="form-nav-buttons">
+          <button type="button" class="btn btn-ghost" onclick="goToStep(1)">Atrás</button>
+          <button type="button" class="btn btn-primary" onclick="goToStep(3)">Siguiente</button>
+        </div>
+      </div>
+
+      <!-- PASO 3: Salud -->
+      <div class="form-step-panel" data-panel="3">
+        <p class="form-section-title">✚ Salud <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:11.5px;">— opcional</span></p>
+        <div class="form-grid">
+          <p>{{ form.vaccines_ok.label }} {{ form.vaccines_ok }}</p>
+          <p>{{ form.neutered.label }} {{ form.neutered }}</p>
+          <p class="full">{{ form.allergies.label }}<br>{{ form.allergies }}</p>
+          <p class="full">{{ form.medical_conditions.label }}<br>{{ form.medical_conditions }}</p>
+          <p class="full">{{ form.clinical_notes.label }}<br>{{ form.clinical_notes }}</p>
+          <p>{{ form.vet_name.label }}<br>{{ form.vet_name }}</p>
+          <p>{{ form.vet_phone.label }}<br>{{ form.vet_phone }}</p>
+        </div>
+        <div class="form-nav-buttons">
+          <button type="button" class="btn btn-ghost" onclick="goToStep(2)">Atrás</button>
+          <button type="submit" class="btn btn-primary">Enviar para revisión</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
+
+<script>
+function goToStep(n) {
+  document.querySelectorAll('.form-step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-panel="' + n + '"]').classList.add('active');
+  document.querySelectorAll('.step-dot').forEach(d => {
+    d.classList.toggle('done', parseInt(d.dataset.step) <= n);
+  });
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Selector de especie (pills) -> sincroniza con el <select> real oculto
+document.querySelectorAll('.species-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.species-pill').forEach(p => p.classList.remove('sel'));
+    pill.classList.add('sel');
+    const select = document.querySelector('[name="species"]');
+    if (select) select.value = pill.dataset.value;
+  });
+});
+
+// Zona de foto: muestra el nombre del archivo elegido
+const photoInput = document.querySelector('#photo-drop input[type=file]');
+if (photoInput) {
+  photoInput.addEventListener('change', () => {
+    const dropZone = document.getElementById('photo-drop');
+    const text = document.getElementById('photo-drop-text');
+    if (photoInput.files.length > 0) {
+      text.textContent = '✓ ' + photoInput.files[0].name;
+      dropZone.classList.add('has-file');
+    }
+  });
+}
+document.getElementById('pet-form').addEventListener('submit', function () {
+  document.getElementById('page-loader').classList.remove('hidden');
+});
+</script>
 {% endblock %}

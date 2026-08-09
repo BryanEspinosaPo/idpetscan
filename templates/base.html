@@ -1,23 +1,38 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IDPetScan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'img/logo-mark.png' %}">
 </head>
 <body>
+
+  <div class="page-loader" id="page-loader">
+    <img src="{% static 'img/loader.gif' %}" alt="Cargando...">
+  </div>
+
   {% if user.is_authenticated %}
-  <div style="padding:12px 24px;background:#0D1B2A;color:#fff;display:flex;justify-content:space-between;align-items:center;font-family:sans-serif;font-size:13px;">
+  <div class="session-bar">
     <span>Conectado como <b>{{ user.username }}</b></span>
-    <form method="post" action="{% url 'accounts:logout' %}" style="margin:0;">
+    <form method="post" action="{% url 'accounts:logout' %}">
       {% csrf_token %}
-      <button type="submit" style="background:none;border:1px solid #2ECCB3;color:#2ECCB3;padding:6px 14px;border-radius:6px;cursor:pointer;">Cerrar sesión</button>
+      <button type="submit">Cerrar sesión</button>
     </form>
   </div>
   {% endif %}
 
   {% block content %}{% endblock %}
+
+  <script>
+    window.addEventListener('load', function () {
+      var loader = document.getElementById('page-loader');
+      setTimeout(function () { loader.classList.add('hidden'); }, 350);
+    });
+  </script>
 </body>
 </html>

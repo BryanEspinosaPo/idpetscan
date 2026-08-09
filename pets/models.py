@@ -64,6 +64,11 @@ class Pet(models.Model):
     neutered = models.BooleanField(default=False)
     allergies = models.TextField(blank=True)
     medical_conditions = models.TextField(blank=True)
+    clinical_notes = models.TextField(
+        blank=True,
+        verbose_name="Novedades clínicas",
+        help_text="Actualizaciones recientes: cirugías, tratamientos en curso, cambios de peso, etc.",
+    )
     vet_name = models.CharField(max_length=150, blank=True)
     vet_phone = models.CharField(max_length=20, blank=True)
 

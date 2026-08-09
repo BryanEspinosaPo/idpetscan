@@ -1,8 +1,78 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="font-family: sans-serif; padding: 40px; background:#0D1B2A; color:white; min-height:100vh;">
-  <h1>🐾 IDPetScan</h1>
-  <p>El esqueleto del proyecto está funcionando correctamente.</p>
-  <p style="color:#2ECCB3;">Fase 3 en progreso — login, registro y logout funcionando.</p>
+<div class="nav">
+  <div class="brand">
+    <img src="{% load static %}{% static 'img/logo-mark.png' %}" class="brand-icon" alt="IDPetScan">
+    IDPet<b>Scan</b>
+  </div>
+  <div class="nav-links">
+    <span>Cómo funciona</span><span>Precios</span>
+    {% if user.is_authenticated %}
+      <a href="{% url 'pets:my_pets' %}">Mis mascotas</a>
+    {% else %}
+      <a href="{% url 'accounts:login' %}">Ingresar</a>
+    {% endif %}
+  </div>
+  <a href="{% if user.is_authenticated %}{% url 'pets:create_pet' %}{% else %}{% url 'accounts:register' %}{% endif %}" class="btn btn-primary">Registra tu mascota</a>
+</div>
+
+<div class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">● Identidad digital para mascotas</div>
+      <h1>Si tu mascota se pierde, <span>que la encuentren</span> en segundos</h1>
+      <p>Escanea la placa, ve su perfil y contacta al dueño al instante. Sin apps que instalar, sin llamadas perdidas.</p>
+      <div class="hero-actions">
+        <a href="{% if user.is_authenticated %}{% url 'pets:create_pet' %}{% else %}{% url 'accounts:register' %}{% endif %}" class="btn btn-primary">Registra tu mascota</a>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;">
+      <div class="hero-tag-card">
+        <div class="hero-tag-photo-mask">
+           <img src="{% static 'img/golden.png' %}" alt="Rocky">
+        </div>
+        <p class="hero-tag-name">Rocky</p>
+        <p class="hero-tag-breed">Golden Retriever · 3 años</p>
+        <div class="hero-tag-row">📍 Última zona vista: Chapinero</div>
+        <div class="hero-tag-row">📞 Contactar al dueño</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="benefits">
+  <h2>Todo lo que tu mascota necesita, en una placa</h2>
+  <div class="benefit-grid">
+    <div class="benefit"><div class="ic">🛡</div><h3>Seguridad</h3><p>Solo tú controlas qué información es visible en el perfil público.</p></div>
+    <div class="benefit"><div class="ic">♥</div><h3>Cuidado</h3><p>Guarda vacunas, alergias y condiciones médicas en un solo lugar.</p></div>
+    <div class="benefit"><div class="ic">⚡</div><h3>Conexión inmediata</h3><p>Quien encuentra a tu mascota te contacta en un toque.</p></div>
+    <div class="benefit"><div class="ic">✚</div><h3>Historial clínico</h3><p>Comparte el historial con cualquier veterinario al instante.</p></div>
+    <div class="benefit"><div class="ic">🐾</div><h3>Identidad única</h3><p>Cada placa tiene un código propio, imposible de duplicar.</p></div>
+    <div class="benefit"><div class="ic">☁</div><h3>Siempre contigo</h3><p>El perfil vive en la nube, actualízalo cuando quieras.</p></div>
+  </div>
+</div>
+
+<div class="how">
+  <h2>Cómo funciona</h2>
+  <div class="steps">
+    <div class="step"><div class="n">01</div><h4>Regístrate</h4><p>Crea tu cuenta en segundos, sin costo.</p></div>
+    <div class="step"><div class="n">02</div><h4>Crea el perfil</h4><p>Llena los datos de tu mascota.</p></div>
+    <div class="step"><div class="n">03</div><h4>Aprobamos y enviamos</h4><p>Validamos la información y producimos tu placa.</p></div>
+    <div class="step"><div class="n">04</div><h4>Listo para escanear</h4><p>Colócala en el collar y actualiza cuando quieras.</p></div>
+  </div>
+</div>
+
+<div class="pricing">
+  <h2>Elige tu placa</h2>
+  <div class="price-grid">
+    <div class="price-card"><h4>Clásica</h4><div class="amt">$45.000</div><ul><li>Placa metálica grabada</li><li>Perfil digital ilimitado</li><li>1 mascota</li></ul></div>
+    <div class="price-card hi"><h4>Familiar</h4><div class="amt">$95.000</div><ul><li>2 placas incluidas</li><li>Historial clínico completo</li><li>Soporte prioritario</li></ul></div>
+    <div class="price-card"><h4>Premium</h4><div class="amt">$65.000</div><ul><li>Placa resistente al agua</li><li>Alertas de "perdido" destacadas</li><li>1 mascota</li></ul></div>
+  </div>
+</div>
+
+<div class="foot">
+  <span>© IDPetScan · Identidad digital para mascotas</span>
+  <span><a href="#">Política de tratamiento de datos</a> · <a href="#">Términos</a></span>
 </div>
 {% endblock %}

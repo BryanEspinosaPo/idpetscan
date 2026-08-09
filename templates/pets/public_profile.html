@@ -1,73 +1,80 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="max-width:380px;margin:0 auto;font-family:'Montserrat',sans-serif;min-height:100vh;">
-
+<div class="profile-page">
+<div class="profile-wrapper">
   {% if pet.is_lost %}
-  <div style="background:#E24B4A;color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:700;letter-spacing:.05em;">
-    ⚠ ESTA MASCOTA ESTÁ PERDIDA
-  </div>
+    <div class="profile-lost-banner">⚠ ESTA MASCOTA ESTÁ PERDIDA</div>
   {% endif %}
 
-  <div style="background:#0D1B2A;padding:24px 20px 46px;text-align:center;">
-    <p style="color:#fff;font-family:'Poppins',sans-serif;font-weight:600;font-size:13px;">IDPetScan</p>
+  <div class="profile-hero">
+    <div class="profile-brand">
+      <img src="{% load static %}{% static 'img/logo-stacked.png' %}" alt="IDPetScan" style="height:52px;">
+    </div>
     {% if pet.photo %}
-      <img src="{{ pet.photo.url }}" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:4px solid #fff;">
+      <img src="{{ pet.photo.url }}" class="profile-photo">
     {% else %}
-      <div style="width:96px;height:96px;border-radius:50%;background:#213345;margin:0 auto;"></div>
+      <div class="profile-photo-placeholder"></div>
     {% endif %}
   </div>
 
-  <div style="padding:24px 20px;margin-top:-24px;background:#fff;border-radius:20px 20px 0 0;">
-    <h2 style="text-align:center;font-family:'Poppins',sans-serif;margin:0;">{{ pet.name }}</h2>
-    <p style="text-align:center;color:#6B7686;font-size:13px;margin:2px 0 20px;">
+  <div class="profile-body">
+    <h1 class="profile-name">{{ pet.name }}</h1>
+    <p class="profile-sub">
       {{ pet.get_species_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}
       {% if pet.get_sex_display %} · {{ pet.get_sex_display }}{% endif %}
     </p>
 
-    <div style="display:flex;gap:10px;margin-bottom:18px;">
-      <a href="tel:{{ pet.contact_phone }}" style="flex:1;text-align:center;text-decoration:none;background:linear-gradient(135deg,#00B3BB,#2ECCB3);color:#fff;border-radius:10px;padding:12px;font-family:'Poppins';font-weight:600;font-size:12.5px;">
-        📞 Llamar al dueño
-      </a>
-      <a href="https://wa.me/57{{ pet.contact_phone }}" style="flex:1;text-align:center;text-decoration:none;background:#E6EAF0;color:#0D1B2A;border-radius:10px;padding:12px;font-family:'Poppins';font-weight:600;font-size:12.5px;">
-        💬 WhatsApp
-      </a>
+    <div class="profile-code-badge">
+      Código de identificación: <b>{{ pet.public_code }}</b>
+    </div>
+
+    <div class="profile-cta">
+      <a href="tel:{{ pet.contact_phone }}" class="call">📞 Llamar al dueño</a>
+      <a href="https://wa.me/57{{ pet.contact_phone }}" class="msg">💬 WhatsApp</a>
     </div>
 
     {% if pet.is_lost %}
-    <div style="background:#FCEBEB;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
-      <p style="font-size:10.5px;color:#A32D2D;text-transform:uppercase;margin:0 0 3px;">Última zona vista</p>
-      <p style="font-size:13px;font-weight:600;margin:0;">{{ pet.last_seen_location|default:"No especificada" }}</p>
-    </div>
-    {% if pet.reward %}
-    <div style="background:#E6EAF0;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
-      <p style="font-size:10.5px;color:#6B7686;text-transform:uppercase;margin:0 0 3px;">Recompensa</p>
-      <p style="font-size:13px;font-weight:600;margin:0;">{{ pet.reward }}</p>
-    </div>
-    {% endif %}
+      <p class="profile-section-label">Estado actual</p>
+      <div class="profile-card alert">
+        <p class="k">Última zona vista</p>
+        <p class="v">{{ pet.last_seen_location|default:"No especificada" }}</p>
+      </div>
+      {% if pet.reward %}
+        <div class="profile-card">
+          <p class="k">Recompensa</p><p class="v">{{ pet.reward }}</p>
+        </div>
+      {% endif %}
     {% endif %}
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-      <div style="background:#E6EAF0;border-radius:12px;padding:12px 14px;">
-        <p style="font-size:10.5px;color:#6B7686;text-transform:uppercase;margin:0 0 3px;">Vacunas</p>
-        <p style="font-size:13px;font-weight:600;margin:0;">{{ pet.vaccines_ok|yesno:"Al día,No registrado" }}</p>
-      </div>
-      <div style="background:#E6EAF0;border-radius:12px;padding:12px 14px;">
-        <p style="font-size:10.5px;color:#6B7686;text-transform:uppercase;margin:0 0 3px;">Esterilizado</p>
-        <p style="font-size:13px;font-weight:600;margin:0;">{{ pet.neutered|yesno:"Sí,No" }}</p>
-      </div>
+    <p class="profile-section-label">Salud</p>
+    <div class="profile-grid2">
+      <div class="profile-card"><p class="k">Vacunas</p><p class="v">{{ pet.vaccines_ok|yesno:"Al día,No registrado" }}</p></div>
+      <div class="profile-card"><p class="k">Esterilizado</p><p class="v">{{ pet.neutered|yesno:"Sí,No" }}</p></div>
     </div>
-
-    <div style="background:#E6EAF0;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
-      <p style="font-size:10.5px;color:#6B7686;text-transform:uppercase;margin:0 0 3px;">Alergias</p>
-      <p style="font-size:13px;font-weight:600;margin:0;">{{ pet.allergies|default:"Ninguna registrada" }}</p>
+    <div class="profile-card">
+      <p class="k">Alergias</p><p class="v">{{ pet.allergies|default:"Ninguna registrada" }}</p>
     </div>
+    {% if pet.clinical_notes %}
+    <div class="profile-card">
+      <p class="k">Novedades clínicas</p><p class="v">{{ pet.clinical_notes }}</p>
+    </div>
+    {% endif %}
 
     {% if pet.vet_name %}
-    <div style="background:#E6EAF0;border-radius:12px;padding:12px 14px;">
-      <p style="font-size:10.5px;color:#6B7686;text-transform:uppercase;margin:0 0 3px;">Veterinario</p>
-      <p style="font-size:13px;font-weight:600;margin:0;">{{ pet.vet_name }} — {{ pet.vet_phone }}</p>
-    </div>
+      <p class="profile-section-label">Veterinario</p>
+      <div class="profile-card">
+        <p class="v">{{ pet.vet_name }} — {{ pet.vet_phone }}</p>
+      </div>
+    {% endif %}
+
+    {% if pet.qr_code %}
+      <p class="profile-section-label">Tu placa QR</p>
+      <div class="profile-qr-box">
+        <img src="{{ pet.qr_code.url }}" alt="Código QR de {{ pet.name }}">
+        <p>Este es el QR grabado en la placa física de {{ pet.name }}</p>
+      </div>
     {% endif %}
   </div>
+</div>
 </div>
 {% endblock %}
