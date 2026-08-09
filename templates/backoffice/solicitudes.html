@@ -1,0 +1,38 @@
+{% extends "backoffice/base.html" %}
+{% block admin_content %}
+<div class="admin-head">
+  <div><h2>Solicitudes pendientes</h2><p>{{ pending|length }} perfil{{ pending|length|pluralize }} esperando revisión</p></div>
+</div>
+
+{% if pending %}
+<table class="admin-table">
+  <thead><tr><th>Mascota</th><th>Dueño</th><th>Enviado</th><th></th></tr></thead>
+  <tbody>
+    {% for pet in pending %}
+    <tr>
+      <td>
+        <div class="admin-cell-pet">
+          {% if pet.photo %}<img src="{{ pet.photo.url }}">{% else %}<div class="ph"></div>{% endif %}
+          <div><b>{{ pet.name }}</b><span>{{ pet.get_species_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}</span></div>
+        </div>
+      </td>
+      <td>{{ pet.contact_name }} · {{ pet.contact_phone }}</td>
+      <td>{{ pet.created_at|timesince }} atrás</td>
+      <td>
+        <form method="post" action="{% url 'backoffice:approve_pet' pet.pk %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="admin-btn-approve">Aprobar</button>
+        </form>
+        <form method="post" action="{% url 'backoffice:reject_pet' pet.pk %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="admin-btn-reject">Rechazar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div class="admin-empty">No hay solicitudes pendientes 🎉</div>
+{% endif %}
+{% endblock %}

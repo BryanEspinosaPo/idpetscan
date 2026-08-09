@@ -1,0 +1,23 @@
+{% extends "backoffice/base.html" %}
+{% block admin_content %}
+<div class="admin-head"><div><h2>Órdenes de placas</h2><p>{{ orders|length }} órdenes</p></div></div>
+{% if orders %}
+<table class="admin-table">
+  <thead><tr><th>Orden</th><th>Cliente</th><th>Plan</th><th>Pago</th><th>Producción</th><th>Total</th></tr></thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <td>#{{ order.pk }}</td>
+      <td>{{ order.user.username }}</td>
+      <td>{{ order.get_plan_display }}</td>
+      <td>{{ order.get_payment_status_display }}</td>
+      <td>{{ order.get_production_status_display }}</td>
+      <td>${{ order.amount }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <div class="admin-empty">Todavía no hay órdenes registradas (pendiente Fase 9-10).</div>
+{% endif %}
+{% endblock %}

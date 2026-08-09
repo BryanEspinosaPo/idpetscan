@@ -11,6 +11,7 @@ urlpatterns = [
     path("cuenta/", include("accounts.urls")),
     path("", include("pets.urls")),
     path("ordenes/", include("orders.urls")),
+    path("panel/", include("backoffice.urls")),
 ]
 
 if settings.DEBUG:

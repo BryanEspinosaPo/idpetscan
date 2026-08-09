@@ -1,3 +1,4 @@
+cat > templates/home.html << 'EOF'
 {% extends "base.html" %}
 {% block content %}
 
@@ -36,7 +37,7 @@
     <div style="display:flex;justify-content:center;">
       <div class="hero-tag-card">
         <div class="hero-tag-photo-mask">
-          <img src="{% load static %}{% static 'img/golden.png' %}" alt="Rocky">
+          <div style="width:100%;height:100%;background:#EDF0F4;"></div>
         </div>
         <p class="hero-tag-name">Rocky</p>
         <p class="hero-tag-breed">Golden Retriever · 3 años</p>
@@ -83,3 +84,4 @@
   <span><a href="#">Política de tratamiento de datos</a> · <a href="#">Términos</a></span>
 </div>
 {% endblock %}
+EOF
