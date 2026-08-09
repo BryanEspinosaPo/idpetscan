@@ -186,3 +186,52 @@ a{color:inherit;}
   .price-grid{grid-template-columns:1fr;}
   .nav-links{display:none;}
 }
+
+/* ---------- Header global ---------- */
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:#fff;border-bottom:1px solid #EEF0F4;position:sticky;top:0;z-index:100;}
+.brand-link{display:flex;align-items:center;}
+.brand-logo-full{height:34px;object-fit:contain;}
+.site-header-actions{display:flex;gap:12px;align-items:center;}
+.site-header-actions form{margin:0;}
+@media (max-width:600px){.site-header{padding:14px 20px;}.brand-logo-full{height:28px;}}
+
+/* ---------- Fix genérico de inputs en formularios ---------- */
+.form-card input:not([type=checkbox]), .form-card select, .form-card textarea{
+  width:100%;border:1.5px solid #E1E4EA;border-radius:10px;padding:11px 13px;
+  font-size:13px;font-family:'Montserrat';margin-top:4px;
+}
+.form-card input[type=checkbox]{width:auto;margin-right:6px;vertical-align:middle;}
+
+/* ---------- Botones bonitos en "Mis mascotas" ---------- */
+.pet-row{flex-wrap:wrap;}
+.pet-row-actions{display:flex;gap:8px;margin-left:auto;}
+.btn-mini{font-family:'Poppins';font-size:11.5px;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:8px;white-space:nowrap;}
+.btn-mini-edit{background:var(--navy);color:#fff;}
+.btn-mini-view{background:var(--grad);color:#fff;}
+
+/* ---------- Sección de mascotas perdidas (landing) ---------- */
+.lost-section{background:#FCEBEB;padding:44px 48px;}
+.lost-section h2{color:#A32D2D;text-align:center;margin:0 0 4px;}
+.lost-section .sub{text-align:center;color:#A32D2D;font-size:13px;opacity:.85;margin:0 0 28px;}
+.lost-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1100px;margin:0 auto;}
+.lost-card{background:#fff;border-radius:14px;overflow:hidden;text-decoration:none;color:var(--ink);box-shadow:0 6px 16px rgba(163,45,45,.12);display:block;}
+.lost-card img{width:100%;height:140px;object-fit:cover;display:block;}
+.lost-card-ph{width:100%;height:140px;background:#EDF0F4;}
+.lost-card-body{padding:12px 14px;}
+.lost-card-body .name{font-weight:700;font-family:'Poppins';margin:0;}
+.lost-card-body .date{font-size:11.5px;color:var(--danger);margin:4px 0 0;}
+@media (max-width:800px){.lost-grid{grid-template-columns:1fr 1fr;}}
+
+/* ---------- Layout de edición: foto al costado ---------- */
+.form-shell-wide{max-width:900px;}
+.edit-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;}
+.edit-photo-side{position:sticky;top:90px;}
+.edit-photo-label{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;margin:0 0 8px;}
+.edit-photo-preview{width:100%;aspect-ratio:1/1;border-radius:14px;object-fit:cover;display:block;}
+.edit-photo-placeholder{background:var(--grey);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;}
+@media (max-width:700px){.edit-layout{grid-template-columns:1fr;}.edit-photo-side{position:static;max-width:200px;margin:0 auto 20px;}}
+
+/* ---------- Toggle "marcar como perdida" ---------- */
+.lost-toggle-btn{width:100%;text-align:left;background:var(--grey);border:1.5px solid #E1E4EA;border-radius:10px;padding:13px 16px;font-family:'Poppins';font-weight:600;font-size:13px;color:var(--ink);cursor:pointer;margin-bottom:14px;}
+.lost-toggle-btn.active{background:#FCEBEB;border-color:var(--danger);color:#A32D2D;}
+.lost-fields-panel{background:#FCEBEB;border-radius:12px;padding:16px;margin-bottom:10px;}

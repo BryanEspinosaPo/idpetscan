@@ -1,20 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="nav">
-  <div class="brand">
-    <img src="{% load static %}{% static 'img/logo-mark.png' %}" class="brand-icon" alt="IDPetScan">
-    IDPet<b>Scan</b>
+
+{% if lost_pets %}
+<div class="lost-section">
+  <h2>⚠ Mascotas perdidas ahora mismo</h2>
+  <p class="sub">Si reconoces a alguno, toca su tarjeta para ver cómo contactar al dueño.</p>
+  <div class="lost-grid">
+    {% for pet in lost_pets %}
+    <a href="{% url 'pets:public_profile' pet.public_code %}" class="lost-card">
+      {% if pet.photo %}
+        <img src="{{ pet.photo.url }}" alt="{{ pet.name }}">
+      {% else %}
+        <div class="lost-card-ph"></div>
+      {% endif %}
+      <div class="lost-card-body">
+        <p class="name">{{ pet.name }}</p>
+        <p class="date">Perdido: {{ pet.last_seen_date|date:"d M Y"|default:"Fecha no registrada" }}</p>
+      </div>
+    </a>
+    {% endfor %}
   </div>
-  <div class="nav-links">
-    <span>Cómo funciona</span><span>Precios</span>
-    {% if user.is_authenticated %}
-      <a href="{% url 'pets:my_pets' %}">Mis mascotas</a>
-    {% else %}
-      <a href="{% url 'accounts:login' %}">Ingresar</a>
-    {% endif %}
-  </div>
-  <a href="{% if user.is_authenticated %}{% url 'pets:create_pet' %}{% else %}{% url 'accounts:register' %}{% endif %}" class="btn btn-primary">Registra tu mascota</a>
 </div>
+{% endif %}
 
 <div class="hero">
   <div class="hero-grid">
@@ -29,7 +36,7 @@
     <div style="display:flex;justify-content:center;">
       <div class="hero-tag-card">
         <div class="hero-tag-photo-mask">
-           <img src="{% static 'img/golden.png' %}" alt="Rocky">
+          <img src="{% load static %}{% static 'img/golden.png' %}" alt="Rocky">
         </div>
         <p class="hero-tag-name">Rocky</p>
         <p class="hero-tag-breed">Golden Retriever · 3 años</p>

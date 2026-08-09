@@ -30,7 +30,17 @@
 
         <div class="form-grid">
           <p>{{ form.name.label }}<br>{{ form.name }}</p>
-          <p>{{ form.breed.label }}<br>{{ form.breed }}</p>
+          <p>
+          Raza<br>
+          <select id="breed-select">
+          <option value="">Selecciona...</option>
+          {% for b in breed_choices %}
+          <option value="{{ b }}">{{ b }}</option>
+          {% endfor %}
+          <option value="Otro">Otro</option>
+          </select>
+          <input type="text" id="breed-other" placeholder="Especifica la raza" style="display:none;margin-top:6px;">
+          </p>
           <p>{{ form.sex.label }}<br>{{ form.sex }}</p>
           <p>{{ form.birth_date.label }}<br>{{ form.birth_date }}</p>
           <p>{{ form.color.label }}<br>{{ form.color }}</p>
@@ -120,5 +130,20 @@ if (photoInput) {
 document.getElementById('pet-form').addEventListener('submit', function () {
   document.getElementById('page-loader').classList.remove('hidden');
 });
+const breedSelect = document.getElementById('breed-select');
+const breedOther = document.getElementById('breed-other');
+function syncBreed() {
+  if (breedSelect.value === 'Otro') {
+    breedOther.style.display = 'block';
+    breedSelect.removeAttribute('name');
+    breedOther.setAttribute('name', 'breed');
+  } else {
+    breedOther.style.display = 'none';
+    breedSelect.setAttribute('name', 'breed');
+    breedOther.removeAttribute('name');
+  }
+}
+breedSelect.addEventListener('change', syncBreed);
+syncBreed();
 </script>
 {% endblock %}

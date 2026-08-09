@@ -15,10 +15,13 @@
         <p class="species">{{ pet.get_species_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}</p>
       </div>
       <span class="status-pill status-{{ pet.status }}">{{ pet.get_status_display }}</span>
-      <a href="{% url 'pets:edit_pet' pet.pk %}" class="action edit">Editar</a>
-      {% if pet.status == 'approved' %}
-        <a href="{% url 'pets:public_profile' pet.public_code %}" class="action view">Ver perfil</a>
-      {% endif %}
+      {% if pet.is_lost %}<span class="status-pill status-rejected">Perdido</span>{% endif %}
+      <div class="pet-row-actions">
+        <a href="{% url 'pets:edit_pet' pet.pk %}" class="btn-mini btn-mini-edit">✎ Editar</a>
+        {% if pet.status == 'approved' %}
+          <a href="{% url 'pets:public_profile' pet.public_code %}" class="btn-mini btn-mini-view">↗ Ver perfil</a>
+        {% endif %}
+      </div>
     </div>
     {% endfor %}
   {% else %}
