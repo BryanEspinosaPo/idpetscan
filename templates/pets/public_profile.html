@@ -6,24 +6,25 @@
     <div class="profile-lost-banner">⚠ ESTA MASCOTA ESTÁ PERDIDA</div>
   {% endif %}
 
-  <div class="profile-hero">
-    <div class="profile-brand">
-      <img src="{% load static %}{% static 'img/logo-stacked.png' %}" alt="IDPetScan" style="height:52px;">
+  <div class="profile-photo-hero">
+    <div class="profile-hero-brand">
+      <img src="{% load static %}{% static 'img/logo-horizontal.png' %}" alt="IDPetScan">
     </div>
     {% if pet.photo %}
-      <img src="{{ pet.photo.url }}" class="profile-photo">
+      <img src="{{ pet.photo.url }}" alt="{{ pet.name }}">
     {% else %}
-      <div class="profile-photo-placeholder"></div>
+      <div class="no-photo">Sin foto disponible</div>
     {% endif %}
+    <div class="profile-hero-name">
+      <h1>{{ pet.name }}</h1>
+      <p>
+        {{ pet.get_species_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}
+        {% if pet.get_sex_display %} · {{ pet.get_sex_display }}{% endif %}
+      </p>
+    </div>
   </div>
 
   <div class="profile-body">
-    <h1 class="profile-name">{{ pet.name }}</h1>
-    <p class="profile-sub">
-      {{ pet.get_species_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}
-      {% if pet.get_sex_display %} · {{ pet.get_sex_display }}{% endif %}
-    </p>
-
     <div class="profile-code-badge">
       Código de identificación: <b>{{ pet.public_code }}</b>
     </div>

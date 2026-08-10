@@ -91,17 +91,23 @@ a{color:inherit;}
 .pet-row a.edit{color:var(--blue);}
 .pet-row a.view{color:var(--teal);}
 
+
 /* ---------- Perfil público ---------- */
-.profile-page{min-height:100vh;background:#EEF1F6;padding:40px 16px;display:flex;align-items:flex-start;justify-content:center;}
-.profile-wrapper{max-width:440px;width:100%;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 30px 60px rgba(13,27,42,0.12);}
-.profile-lost-banner{background:var(--danger);color:#fff;text-align:center;padding:12px;font-size:13px;font-weight:700;letter-spacing:.06em;}
-.profile-hero{background:var(--navy);padding:36px 28px 64px;text-align:center;position:relative;}
-.profile-brand{display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
-.profile-photo{width:140px;height:140px;border-radius:50%;object-fit:cover;border:5px solid #fff;box-shadow:0 10px 24px rgba(0,0,0,.25);}
-.profile-photo-placeholder{width:140px;height:140px;border-radius:50%;background:#213345;margin:0 auto;border:5px solid #fff;}
-.profile-body{padding:32px 28px 36px;margin-top:-40px;background:#fff;border-radius:28px 28px 0 0;}
-.profile-name{text-align:center;margin:0;font-size:26px;}
-.profile-sub{text-align:center;color:var(--muted);font-size:14px;margin:4px 0 20px;}
+.profile-page{min-height:100vh;background:#EEF1F6;padding:0;display:flex;align-items:flex-start;justify-content:center;}
+.profile-wrapper{max-width:480px;width:100%;background:#fff;min-height:100vh;box-shadow:0 30px 60px rgba(13,27,42,0.12);}
+.profile-lost-banner{background:var(--danger);color:#fff;text-align:center;padding:12px;font-size:13px;font-weight:700;letter-spacing:.06em;position:relative;z-index:2;}
+
+.profile-photo-hero{width:100%;height:420px;position:relative;background:var(--navy);overflow:hidden;}
+.profile-photo-hero img{width:100%;height:100%;object-fit:cover;display:block;}
+.profile-photo-hero .no-photo{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#5A6B80;font-size:13px;}
+.profile-photo-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(to top, rgba(13,27,42,.85), transparent);}
+.profile-hero-brand{position:absolute;top:20px;left:20px;z-index:2;}
+.profile-hero-brand img{height:30px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));}
+.profile-hero-name{position:absolute;bottom:20px;left:24px;right:24px;z-index:2;color:#fff;}
+.profile-hero-name h1{margin:0;font-size:28px;}
+.profile-hero-name p{margin:4px 0 0;font-size:14px;color:#DCE2EA;}
+
+.profile-body{padding:24px 24px 36px;}
 .profile-code-badge{text-align:center;font-size:12px;color:var(--muted);background:var(--grey);border-radius:100px;padding:8px 16px;margin-bottom:20px;}
 .profile-code-badge b{color:var(--navy);font-family:'Poppins';letter-spacing:.05em;}
 .profile-cta{display:flex;gap:12px;margin-bottom:24px;}
@@ -118,9 +124,10 @@ a{color:inherit;}
 .profile-qr-box{text-align:center;background:var(--grey);border-radius:14px;padding:18px;}
 .profile-qr-box img{width:140px;height:140px;margin-bottom:8px;}
 .profile-qr-box p{font-size:11.5px;color:var(--muted);margin:0;}
-@media (max-width:480px){
-  .profile-page{padding:0;}
-  .profile-wrapper{border-radius:0;box-shadow:none;min-height:100vh;}
+
+@media (min-width:481px){
+  .profile-page{padding:40px 16px;}
+  .profile-wrapper{border-radius:28px;overflow:hidden;min-height:auto;}
 }
 
 /* ---------- Landing: navbar ---------- */
@@ -190,7 +197,7 @@ a{color:inherit;}
 /* ---------- Header global ---------- */
 .site-header{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:#fff;border-bottom:1px solid #EEF0F4;position:sticky;top:0;z-index:100;}
 .brand-link{display:flex;align-items:center;}
-.brand-logo-full{height:34px;object-fit:contain;}
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:#fff;border-bottom:1px solid #EEF0F4;position:sticky;top:0;z-index:100;}
 .site-header-actions{display:flex;gap:12px;align-items:center;}
 .site-header-actions form{margin:0;}
 @media (max-width:600px){.site-header{padding:14px 20px;}.brand-logo-full{height:28px;}}
