@@ -140,3 +140,5 @@ else:
 
 # Correo interno que recibe QR + datos de cada mascota aprobada
 ADMIN_NOTIFICATION_EMAIL = os.getenv("ADMIN_NOTIFICATION_EMAIL", "admin@idpetscan.com")
+
+WHATSAPP_BUSINESS_NUMBER = os.getenv("WHATSAPP_BUSINESS_NUMBER", "")

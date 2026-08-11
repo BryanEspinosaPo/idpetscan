@@ -197,7 +197,7 @@ a{color:inherit;}
 /* ---------- Header global ---------- */
 .site-header{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:#fff;border-bottom:1px solid #EEF0F4;position:sticky;top:0;z-index:100;}
 .brand-link{display:flex;align-items:center;}
-.site-header{display:flex;align-items:center;justify-content:space-between;padding:20px 48px;background:#fff;border-bottom:1px solid #EEF0F4;position:sticky;top:0;z-index:100;}
+.brand-logo-full{height:54px;object-fit:contain;}
 .site-header-actions{display:flex;gap:12px;align-items:center;}
 .site-header-actions form{margin:0;}
 @media (max-width:600px){.site-header{padding:14px 20px;}.brand-logo-full{height:28px;}}

@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+
 from orders.models import Order
 from pets.emails import send_admin_notification, send_owner_status_email
 from pets.models import Pet
@@ -69,3 +70,11 @@ def usuarios_view(request):
 def ordenes_view(request):
     orders = Order.objects.all().order_by("-created_at")
     return render(request, "backoffice/ordenes.html", {"orders": orders, "active": "ordenes"})
+
+@user_passes_test(is_staff, login_url="backoffice:login")
+@require_POST
+def mark_order_paid_view(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    order.payment_status = "paid"
+    order.save()
+    return redirect("backoffice:ordenes")

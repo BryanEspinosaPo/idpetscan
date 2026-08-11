@@ -12,4 +12,5 @@ urlpatterns = [
     path("mascotas/", views.mascotas_view, name="mascotas"),
     path("usuarios/", views.usuarios_view, name="usuarios"),
     path("ordenes/", views.ordenes_view, name="ordenes"),
+    path("ordenes/<int:pk>/marcar-pagada/", views.mark_order_paid_view, name="mark_order_paid"),
 ]

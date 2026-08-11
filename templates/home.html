@@ -31,7 +31,7 @@
       <h1>Si tu mascota se pierde, <span>que la encuentren</span> en segundos</h1>
       <p>Escanea la placa, ve su perfil y contacta al dueño al instante. Sin apps que instalar, sin llamadas perdidas.</p>
       <div class="hero-actions">
-        <a href="{% if user.is_authenticated %}{% url 'pets:create_pet' %}{% else %}{% url 'accounts:register' %}{% endif %}" class="btn btn-primary">Registra tu mascota</a>
+        <a href="{% if user.is_authenticated %}{% url 'orders:plans' %}{% else %}{% url 'accounts:register' %}{% endif %}" class="btn btn-primary">Registra tu mascota</a>
       </div>
     </div>
     <div style="display:flex;justify-content:center;">

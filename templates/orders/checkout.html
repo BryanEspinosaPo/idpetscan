@@ -1,0 +1,29 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="form-shell">
+  <h2>Confirma tu compra</h2>
+  <p class="sub">Plan {{ order.get_plan_display }} — ${{ order.amount }} COP</p>
+
+  <div class="form-card" style="text-align:center;">
+    <div class="profile-code-badge" style="margin-bottom:20px;">
+      Código de tu orden: <b>{{ order.reference }}</b>
+    </div>
+
+    <p style="color:var(--muted);font-size:13px;margin-bottom:24px;line-height:1.6;">
+      Escríbenos por WhatsApp con este código para coordinar el pago.
+      Apenas confirmemos tu pago, vas a poder registrar el perfil de tu mascota.
+    </p>
+
+    <a href="{{ whatsapp_url }}" target="_blank" class="btn btn-primary" style="display:inline-block;">
+      💬 Contactar por WhatsApp
+    </a>
+
+    <p style="margin-top:24px;">
+      <a href="{% url 'orders:confirmation' order.id %}" style="font-size:12.5px;color:var(--muted);text-decoration:underline;">
+        Ya pagué, revisar estado de mi orden →
+      </a>
+    </p>
+  </div>
+</div>
+{% endblock %}
