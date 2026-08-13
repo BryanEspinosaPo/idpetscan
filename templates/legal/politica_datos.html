@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="legal-page">
+  <h1>Política de Tratamiento de Datos Personales</h1>
+  <p class="legal-updated">Última actualización: {% now "d de F de Y" %}</p>
+
+  <p>IDPetScan ("nosotros", "la plataforma") es responsable del tratamiento de los datos personales que usted nos suministra al registrarse y usar nuestros servicios, de conformidad con la Ley 1581 de 2012, el Decreto 1377 de 2013 y demás normas concordantes de la República de Colombia.</p>
+
+  <h2>1. ¿Qué datos recolectamos?</h2>
+  <ul>
+    <li><strong>Datos del titular de la cuenta:</strong> nombre de usuario, correo electrónico, contraseña (almacenada de forma cifrada).</li>
+    <li><strong>Datos de contacto del dueño de la mascota:</strong> nombre, teléfono(s), correo electrónico, zona/barrio de residencia.</li>
+    <li><strong>Datos de la mascota:</strong> nombre, especie, raza, foto, información de salud (vacunas, alergias, condiciones médicas, historial clínico).</li>
+    <li><strong>Datos de la orden de compra:</strong> plan adquirido, valor, estado del pago.</li>
+  </ul>
+
+  <h2>2. Finalidad del tratamiento</h2>
+  <p>Los datos que usted nos suministra se utilizan exclusivamente para:</p>
+  <ul>
+    <li>Crear y gestionar el perfil público de identificación de su mascota, accesible mediante el código QR de la placa física.</li>
+    <li>Permitir que un tercero que encuentre a su mascota pueda contactarlo.</li>
+    <li>Procesar la compra y producción de la placa física.</li>
+    <li>Enviar notificaciones relacionadas con el estado de su registro (aprobación, rechazo, confirmación de pago).</li>
+    <li>Cumplir obligaciones legales y responder ante autoridades competentes cuando sea requerido.</li>
+  </ul>
+
+  <h2>3. Datos sensibles</h2>
+  <p>La información de salud de su mascota no constituye un dato sensible bajo la ley colombiana (que protege datos sensibles de personas naturales), pero la tratamos con el mismo nivel de cuidado. Los datos de contacto del titular (nombre, teléfono, correo) sí son datos personales protegidos por la Ley 1581, y su tratamiento requiere su autorización previa, expresa e informada, la cual usted otorga al marcar la casilla de consentimiento durante el registro.</p>
+
+  <h2>4. Visibilidad pública de los datos</h2>
+  <p>Al aprobar el perfil de su mascota, cierta información se hace <strong>pública</strong> y accesible a cualquier persona que escanee el código QR de la placa: nombre y foto de la mascota, información básica de salud, y un botón de contacto (llamada/WhatsApp) hacia el número de teléfono registrado. No publicamos su dirección exacta, correo electrónico, ni documento de identidad. Usted puede solicitar la despublicación de su perfil en cualquier momento.</p>
+
+  <h2>5. Derechos del titular (Derechos ARCO)</h2>
+  <p>Como titular de sus datos personales, usted tiene derecho a:</p>
+  <ul>
+    <li><strong>Acceder</strong> a sus datos personales que reposan en nuestras bases de datos.</li>
+    <li><strong>Rectificar</strong> datos que sean inexactos, incompletos o desactualizados.</li>
+    <li><strong>Cancelar/suprimir</strong> sus datos cuando su tratamiento no respete los principios y garantías legales.</li>
+    <li><strong>Oponerse</strong> al tratamiento de sus datos para fines específicos.</li>
+  </ul>
+  <p>Para ejercer cualquiera de estos derechos, escríbanos a <a href="mailto:{{ admin_email }}">{{ admin_email }}</a> indicando su solicitud. Responderemos dentro de los términos establecidos por la ley (10 días hábiles para consultas, 15 días hábiles para reclamos).</p>
+
+  <h2>6. Seguridad de la información</h2>
+  <p>Implementamos medidas técnicas y administrativas razonables para proteger sus datos contra pérdida, uso indebido, acceso no autorizado o alteración, incluyendo cifrado de contraseñas y códigos de identificación no adivinables para cada perfil público.</p>
+
+  <h2>7. Vigencia</h2>
+  <p>Sus datos se conservarán mientras su cuenta permanezca activa, y mientras sea necesario para cumplir la finalidad del tratamiento o una obligación legal. Puede solicitar la eliminación de su cuenta y datos asociados en cualquier momento.</p>
+
+  <h2>8. Contacto</h2>
+  <p>Si tiene preguntas sobre esta política, escríbanos a <a href="mailto:{{ admin_email }}">{{ admin_email }}</a>.</p>
+</div>
+{% endblock %}

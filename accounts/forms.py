@@ -5,6 +5,11 @@ from django.contrib.auth.models import User
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Correo electrónico")
+    accepts_data_policy = forms.BooleanField(
+        required=True,
+        label="He leído y autorizo el tratamiento de mis datos personales según la Política de Tratamiento de Datos.",
+        error_messages={"required": "Debes autorizar el tratamiento de datos para poder registrarte."},
+    )
 
     class Meta:
         model = User

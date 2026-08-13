@@ -291,3 +291,16 @@ a{color:inherit;}
 .lock-text{font-size:12.5px;color:var(--muted);margin:0 0 14px;}
 .lock-form{display:flex;gap:8px;}
 .lock-form input{flex:1;border:1.5px solid #E1E4EA;border-radius:10px;padding:10px 12px;font-size:14px;text-align:center;letter-spacing:.1em;}
+
+/* ---------- Página legal ---------- */
+.legal-page{max-width:720px;margin:0 auto;padding:50px 24px 80px;}
+.legal-page h1{font-size:26px;margin:0 0 4px;}
+.legal-updated{color:var(--muted);font-size:12.5px;margin:0 0 30px;}
+.legal-page h2{font-size:16px;color:var(--blue);margin:28px 0 10px;}
+.legal-page p, .legal-page li{font-size:14px;line-height:1.7;color:var(--ink);}
+.legal-page ul{padding-left:20px;}
+.legal-page a{color:var(--teal);font-weight:600;}
+
+.consent-field label{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;font-weight:400;color:var(--muted);line-height:1.5;}
+.consent-field input{width:auto;margin-top:2px;flex:none;}
+.consent-field a{color:var(--teal);font-weight:600;}

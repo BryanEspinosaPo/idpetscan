@@ -9,7 +9,8 @@
     <h2>Crea tu cuenta</h2>
     <p class="sub">Es gratis. Luego podrás registrar y gestionar tus mascotas.</p>
     {% if form.errors %}
-      <ul class="error-list">{% for field in form %}{% for error in field.errors %}<li>{{ error }}</li>{% endfor %}{% endfor %}</ul>
+    <ul class="error-list">{% for field in form %}{% for error in field.errors %}<li>{{ error }}</li>{% endfor %}{%
+      endfor %}</ul>
     {% endif %}
     <form method="post">
       {% csrf_token %}
@@ -17,6 +18,16 @@
       <div class="field"><label>Correo electrónico</label>{{ form.email }}</div>
       <div class="field"><label>Contraseña</label>{{ form.password1 }}</div>
       <div class="field"><label>Confirmar contraseña</label>{{ form.password2 }}</div>
+      <div class="field consent-field">
+        <label>
+          {{ form.accepts_data_policy }}
+          He leído y autorizo el tratamiento de mis datos personales según la
+          <a href="{% url 'politica_datos' %}" target="_blank">Política de Tratamiento de Datos</a>.
+        </label>
+        {% if form.accepts_data_policy.errors %}
+        <p class="error-list">{{ form.accepts_data_policy.errors.0 }}</p>
+        {% endif %}
+      </div>
       <button type="submit" class="auth-btn">Registrarme</button>
     </form>
     <p class="auth-alt">¿Ya tienes cuenta? <a href="{% url 'accounts:login' %}">Ingresa aquí</a></p>
