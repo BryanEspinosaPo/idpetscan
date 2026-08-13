@@ -15,6 +15,11 @@ def generate_public_code():
     return "".join(secrets.choice(alphabet) for _ in range(8))
 
 
+def generate_medical_code():
+    """Código numérico de 6 dígitos para desbloquear el historial médico."""
+    return "".join(secrets.choice(string.digits) for _ in range(6))
+
+
 class Pet(models.Model):
     SPECIES_CHOICES = [
         ("dog", "Perro"),
@@ -51,6 +56,7 @@ class Pet(models.Model):
     size = models.CharField(max_length=50, blank=True)
     photo = models.ImageField(upload_to="pets/", blank=True, null=True)
     qr_code = models.ImageField(upload_to="qr_codes/", blank=True, null=True)
+    medical_access_code = models.CharField(max_length=6, blank=True, default=generate_medical_code, editable=False)
 
     # --- Contacto del dueño ---
     contact_name = models.CharField(max_length=100)
@@ -92,3 +98,16 @@ class Pet(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.get_species_display()})"
+
+
+class MedicalRecord(models.Model):
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name="medical_records")
+    date = models.DateField(verbose_name="Fecha")
+    description = models.TextField(verbose_name="Novedad")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date", "-created_at"]
+
+    def __str__(self):
+        return f"{self.pet.name} — {self.date}"

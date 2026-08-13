@@ -1,6 +1,11 @@
+import secrets
 
 from django.conf import settings
 from django.db import models
+
+
+def generate_order_reference():
+    return f"idpetscan-{secrets.token_hex(8)}"
 
 
 class Order(models.Model):
@@ -23,11 +28,13 @@ class Order(models.Model):
         ("delivered", "Entregado"),
     ]
 
+    reference = models.CharField(max_length=64, unique=True, default=generate_order_reference, editable=False)
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders"
     )
-    pet = models.ForeignKey(
-        "pets.Pet", on_delete=models.SET_NULL, null=True, blank=True, related_name="orders"
+    pet = models.OneToOneField(
+        "pets.Pet", on_delete=models.SET_NULL, null=True, blank=True, related_name="order"
     )
 
     plan = models.CharField(max_length=10, choices=PLAN_CHOICES, default="classic")
@@ -40,7 +47,6 @@ class Order(models.Model):
         max_length=15, choices=PRODUCTION_STATUS_CHOICES, default="waiting"
     )
 
-    # Referencia de la pasarela de pago (Wompi), se completa en la Fase 10
     payment_reference = models.CharField(max_length=100, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)

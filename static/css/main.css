@@ -274,3 +274,20 @@ a{color:inherit;}
   .admin-side{width:100%;flex-direction:row;flex-wrap:wrap;padding:14px;}
   .admin-brand{margin-bottom:0;margin-right:16px;}
 }
+
+/* ---------- Historial clínico ---------- */
+.medical-history{margin-top:30px;padding-top:24px;border-top:1px solid #F2F3F6;}
+.medical-add-form{background:var(--grey);border-radius:12px;padding:16px;margin-bottom:20px;}
+.medical-timeline{display:flex;flex-direction:column;gap:10px;}
+.medical-item{background:#fff;border:1.5px solid #EEF0F4;border-radius:12px;padding:12px 14px;}
+.medical-date{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.04em;}
+.medical-desc{margin:4px 0 0;font-size:13px;color:var(--ink);}
+
+.edit-main{display:flex;flex-direction:column;gap:24px;}
+
+/* ---------- Historial médico bloqueado (perfil público) ---------- */
+.medical-lock-box{background:var(--grey);border-radius:14px;padding:22px;text-align:center;}
+.lock-icon{font-size:26px;margin:0 0 8px;}
+.lock-text{font-size:12.5px;color:var(--muted);margin:0 0 14px;}
+.lock-form{display:flex;gap:8px;}
+.lock-form input{flex:1;border:1.5px solid #E1E4EA;border-radius:10px;padding:10px 12px;font-size:14px;text-align:center;letter-spacing:.1em;}

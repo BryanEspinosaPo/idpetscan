@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils import timezone
 
+from .models import MedicalRecord
+
 from .emails import send_admin_notification, send_owner_status_email
 from .models import Pet
 from .utils import generate_qr_for_pet
@@ -33,3 +35,5 @@ class PetAdmin(admin.ModelAdmin):
     search_fields = ("name", "owner__username", "contact_phone", "public_code")
     readonly_fields = ("public_code", "qr_code", "created_at", "updated_at", "approved_at")
     actions = [approve_pets, reject_pets]
+
+admin.site.register(MedicalRecord)

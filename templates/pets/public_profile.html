@@ -1,81 +1,105 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="profile-page">
-<div class="profile-wrapper">
-  {% if pet.is_lost %}
-    <div class="profile-lost-banner">⚠ ESTA MASCOTA ESTÁ PERDIDA</div>
-  {% endif %}
-
-  <div class="profile-photo-hero">
-    <div class="profile-hero-brand">
-      <img src="{% load static %}{% static 'img/logo-horizontal.png' %}" alt="IDPetScan">
-    </div>
-    {% if pet.photo %}
-      <img src="{{ pet.photo.url }}" alt="{{ pet.name }}">
-    {% else %}
-      <div class="no-photo">Sin foto disponible</div>
-    {% endif %}
-    <div class="profile-hero-name">
-      <h1>{{ pet.name }}</h1>
-      <p>
-        {{ pet.get_species_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}
-        {% if pet.get_sex_display %} · {{ pet.get_sex_display }}{% endif %}
-      </p>
-    </div>
-  </div>
-
-  <div class="profile-body">
-    <div class="profile-code-badge">
-      Código de identificación: <b>{{ pet.public_code }}</b>
-    </div>
-
-    <div class="profile-cta">
-      <a href="tel:{{ pet.contact_phone }}" class="call">📞 Llamar al dueño</a>
-      <a href="https://wa.me/57{{ pet.contact_phone }}" class="msg">💬 WhatsApp</a>
-    </div>
-
+  <div class="profile-wrapper">
     {% if pet.is_lost %}
+    <div class="profile-lost-banner">⚠ ESTA MASCOTA ESTÁ PERDIDA</div>
+    {% endif %}
+
+    <div class="profile-photo-hero">
+      <div class="profile-hero-brand">
+        <img src="{% load static %}{% static 'img/logo-horizontal.png' %}" alt="IDPetScan">
+      </div>
+      {% if pet.photo %}
+      <img src="{{ pet.photo.url }}" alt="{{ pet.name }}">
+      {% else %}
+      <div class="no-photo">Sin foto disponible</div>
+      {% endif %}
+      <div class="profile-hero-name">
+        <h1>{{ pet.name }}</h1>
+        <p>
+          {{ pet.get_species_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}
+          {% if pet.get_sex_display %} · {{ pet.get_sex_display }}{% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="profile-body">
+      <div class="profile-code-badge">
+        Código de identificación: <b>{{ pet.public_code }}</b>
+      </div>
+
+      <div class="profile-cta">
+        <a href="tel:{{ pet.contact_phone }}" class="call">📞 Llamar al dueño</a>
+        <a href="https://wa.me/57{{ pet.contact_phone }}" class="msg">💬 WhatsApp</a>
+      </div>
+
+      {% if pet.is_lost %}
       <p class="profile-section-label">Estado actual</p>
       <div class="profile-card alert">
         <p class="k">Última zona vista</p>
         <p class="v">{{ pet.last_seen_location|default:"No especificada" }}</p>
       </div>
       {% if pet.reward %}
-        <div class="profile-card">
-          <p class="k">Recompensa</p><p class="v">{{ pet.reward }}</p>
-        </div>
+      <div class="profile-card">
+        <p class="k">Recompensa</p>
+        <p class="v">{{ pet.reward }}</p>
+      </div>
       {% endif %}
-    {% endif %}
+      {% endif %}
 
-    <p class="profile-section-label">Salud</p>
-    <div class="profile-grid2">
-      <div class="profile-card"><p class="k">Vacunas</p><p class="v">{{ pet.vaccines_ok|yesno:"Al día,No registrado" }}</p></div>
-      <div class="profile-card"><p class="k">Esterilizado</p><p class="v">{{ pet.neutered|yesno:"Sí,No" }}</p></div>
-    </div>
-    <div class="profile-card">
-      <p class="k">Alergias</p><p class="v">{{ pet.allergies|default:"Ninguna registrada" }}</p>
-    </div>
-    {% if pet.clinical_notes %}
-    <div class="profile-card">
-      <p class="k">Novedades clínicas</p><p class="v">{{ pet.clinical_notes }}</p>
-    </div>
-    {% endif %}
+      <p class="profile-section-label">Salud</p>
+      <div class="profile-grid2">
+        <div class="profile-card">
+          <p class="k">Vacunas</p>
+          <p class="v">{{ pet.vaccines_ok|yesno:"Al día,No registrado" }}</p>
+        </div>
+        <div class="profile-card">
+          <p class="k">Esterilizado</p>
+          <p class="v">{{ pet.neutered|yesno:"Sí,No" }}</p>
+        </div>
+      </div>
+      <div class="profile-card">
+        <p class="k">Alergias</p>
+        <p class="v">{{ pet.allergies|default:"Ninguna registrada" }}</p>
+      </div>
+      {% if pet.medical_records.all %}
+      <p class="profile-section-label">Historial clínico</p>
+      {% if medical_unlocked %}
+      {% for record in pet.medical_records.all %}
+      <div class="profile-card">
+        <p class="k">{{ record.date|date:"d M Y" }}</p>
+        <p class="v">{{ record.description }}</p>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="medical-lock-box">
+        <p class="lock-icon">🔒</p>
+        <p class="lock-text">Este historial está protegido. Pide el código de acceso al dueño de {{ pet.name }}.</p>
+        <form method="post" action="{% url 'pets:unlock_medical_history' pet.public_code %}" class="lock-form">
+          {% csrf_token %}
+          <input type="text" name="access_code" placeholder="Código de 6 dígitos" maxlength="6" required>
+          <button type="submit" class="btn btn-primary">Desbloquear</button>
+        </form>
+      </div>
+      {% endif %}
+      {% endif %}
 
-    {% if pet.vet_name %}
+      {% if pet.vet_name %}
       <p class="profile-section-label">Veterinario</p>
       <div class="profile-card">
         <p class="v">{{ pet.vet_name }} — {{ pet.vet_phone }}</p>
       </div>
-    {% endif %}
+      {% endif %}
 
-    {% if pet.qr_code %}
+      {% if pet.qr_code %}
       <p class="profile-section-label">Tu placa QR</p>
       <div class="profile-qr-box">
         <img src="{{ pet.qr_code.url }}" alt="Código QR de {{ pet.name }}">
         <p>Este es el QR grabado en la placa física de {{ pet.name }}</p>
       </div>
-    {% endif %}
+      {% endif %}
+    </div>
   </div>
-</div>
 </div>
 {% endblock %}

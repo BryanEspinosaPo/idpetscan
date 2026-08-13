@@ -1,6 +1,8 @@
 from django import forms
 
-from .models import Pet
+from.models import MedicalRecord, Pet
+
+
 
 
 class PetForm(forms.ModelForm):
@@ -35,3 +37,13 @@ class PetForm(forms.ModelForm):
             "last_seen_date": "Fecha en que se perdió",
             "reward": "Recompensa (opcional)",
         }
+
+class MedicalRecordForm(forms.ModelForm):
+    class Meta:
+        model = MedicalRecord
+        fields = ["date", "description"]
+        widgets = {
+            "date": forms.DateInput(attrs={"type": "date"}),
+            "description": forms.Textarea(attrs={"rows": 2, "placeholder": "Ej: Vacuna antirrábica aplicada, control de peso, etc."}),
+        }
+        labels = {"date": "Fecha", "description": "Novedad"}

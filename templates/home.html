@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% block content %}
 
@@ -10,9 +9,9 @@
     {% for pet in lost_pets %}
     <a href="{% url 'pets:public_profile' pet.public_code %}" class="lost-card">
       {% if pet.photo %}
-        <img src="{{ pet.photo.url }}" alt="{{ pet.name }}">
+      <img src="{{ pet.photo.url }}" alt="{{ pet.name }}">
       {% else %}
-        <div class="lost-card-ph"></div>
+      <div class="lost-card-ph"></div>
       {% endif %}
       <div class="lost-card-body">
         <p class="name">{{ pet.name }}</p>
@@ -29,9 +28,11 @@
     <div>
       <div class="eyebrow">● Identidad digital para mascotas</div>
       <h1>Si tu mascota se pierde, <span>que la encuentren</span> en segundos</h1>
-      <p>Escanea la placa, ve su perfil y contacta al dueño al instante. Sin apps que instalar, sin llamadas perdidas.</p>
+      <p>Escanea la placa, ve su perfil y contacta al dueño al instante. Sin apps que instalar, sin llamadas perdidas.
+      </p>
       <div class="hero-actions">
-        <a href="{% if user.is_authenticated %}{% url 'orders:plans' %}{% else %}{% url 'accounts:register' %}{% endif %}" class="btn btn-primary">Registra tu mascota</a>
+        <a href="{% if user.is_authenticated %}{% url 'orders:plans' %}{% else %}{% url 'accounts:register' %}{% endif %}"
+          class="btn btn-primary">Registra tu mascota</a>
       </div>
     </div>
     <div style="display:flex;justify-content:center;">
@@ -51,31 +52,101 @@
 <div class="benefits">
   <h2>Todo lo que tu mascota necesita, en una placa</h2>
   <div class="benefit-grid">
-    <div class="benefit"><div class="ic">🛡</div><h3>Seguridad</h3><p>Solo tú controlas qué información es visible en el perfil público.</p></div>
-    <div class="benefit"><div class="ic">♥</div><h3>Cuidado</h3><p>Guarda vacunas, alergias y condiciones médicas en un solo lugar.</p></div>
-    <div class="benefit"><div class="ic">⚡</div><h3>Conexión inmediata</h3><p>Quien encuentra a tu mascota te contacta en un toque.</p></div>
-    <div class="benefit"><div class="ic">✚</div><h3>Historial clínico</h3><p>Comparte el historial con cualquier veterinario al instante.</p></div>
-    <div class="benefit"><div class="ic">🐾</div><h3>Identidad única</h3><p>Cada placa tiene un código propio, imposible de duplicar.</p></div>
-    <div class="benefit"><div class="ic">☁</div><h3>Siempre contigo</h3><p>El perfil vive en la nube, actualízalo cuando quieras.</p></div>
+    <div class="benefit">
+      <div class="ic">🛡</div>
+      <h3>Seguridad</h3>
+      <p>Solo tú controlas qué información es visible en el perfil público.</p>
+    </div>
+    <div class="benefit">
+      <div class="ic">♥</div>
+      <h3>Cuidado</h3>
+      <p>Guarda vacunas, alergias y condiciones médicas en un solo lugar.</p>
+    </div>
+    <div class="benefit">
+      <div class="ic">⚡</div>
+      <h3>Conexión inmediata</h3>
+      <p>Quien encuentra a tu mascota te contacta en un toque.</p>
+    </div>
+    <div class="benefit">
+      <div class="ic">✚</div>
+      <h3>Historial clínico</h3>
+      <p>Comparte el historial con cualquier veterinario al instante.</p>
+    </div>
+    <div class="benefit">
+      <div class="ic">🐾</div>
+      <h3>Identidad única</h3>
+      <p>Cada placa tiene un código propio, imposible de duplicar.</p>
+    </div>
+    <div class="benefit">
+      <div class="ic">☁</div>
+      <h3>Siempre contigo</h3>
+      <p>El perfil vive en la nube, actualízalo cuando quieras.</p>
+    </div>
   </div>
 </div>
 
 <div class="how">
   <h2>Cómo funciona</h2>
   <div class="steps">
-    <div class="step"><div class="n">01</div><h4>Regístrate</h4><p>Crea tu cuenta en segundos, sin costo.</p></div>
-    <div class="step"><div class="n">02</div><h4>Crea el perfil</h4><p>Llena los datos de tu mascota.</p></div>
-    <div class="step"><div class="n">03</div><h4>Aprobamos y enviamos</h4><p>Validamos la información y producimos tu placa.</p></div>
-    <div class="step"><div class="n">04</div><h4>Listo para escanear</h4><p>Colócala en el collar y actualiza cuando quieras.</p></div>
+    <div class="step">
+      <div class="n">01</div>
+      <h4>Regístrate</h4>
+      <p>Crea tu cuenta en segundos, sin costo.</p>
+    </div>
+    <div class="step">
+      <div class="n">02</div>
+      <h4>Crea el perfil</h4>
+      <p>Llena los datos de tu mascota.</p>
+    </div>
+    <div class="step">
+      <div class="n">03</div>
+      <h4>Aprobamos y enviamos</h4>
+      <p>Validamos la información y producimos tu placa.</p>
+    </div>
+    <div class="step">
+      <div class="n">04</div>
+      <h4>Listo para escanear</h4>
+      <p>Colócala en el collar y actualiza cuando quieras.</p>
+    </div>
   </div>
 </div>
 
 <div class="pricing">
   <h2>Elige tu placa</h2>
   <div class="price-grid">
-    <div class="price-card"><h4>Clásica</h4><div class="amt">$45.000</div><ul><li>Placa metálica grabada</li><li>Perfil digital ilimitado</li><li>1 mascota</li></ul></div>
-    <div class="price-card hi"><h4>Familiar</h4><div class="amt">$95.000</div><ul><li>2 placas incluidas</li><li>Historial clínico completo</li><li>Soporte prioritario</li></ul></div>
-    <div class="price-card"><h4>Premium</h4><div class="amt">$65.000</div><ul><li>Placa resistente al agua</li><li>Alertas de "perdido" destacadas</li><li>1 mascota</li></ul></div>
+    <div class="price-card">
+      <h4>Clásica</h4>
+      <div class="amt">$45.000</div>
+      <ul>
+        <li>Placa metálica grabada</li>
+        <li>Perfil digital ilimitado</li>
+        <li>1 mascota</li>
+      </ul>
+      <a href="{% url 'orders:create_order' 'classic' %}" class="btn btn-primary"
+        style="display:block;margin-top:16px;">Comprar</a>
+    </div>
+    <div class="price-card hi">
+      <h4>Familiar</h4>
+      <div class="amt">$95.000</div>
+      <ul>
+        <li>2 placas incluidas</li>
+        <li>Historial clínico completo</li>
+        <li>Soporte prioritario</li>
+      </ul>
+      <a href="{% url 'orders:create_order' 'family' %}" class="btn"
+        style="display:block;margin-top:16px;background:var(--navy);color:#fff;">Comprar</a>
+    </div>
+    <div class="price-card">
+      <h4>Premium</h4>
+      <div class="amt">$65.000</div>
+      <ul>
+        <li>Placa resistente al agua</li>
+        <li>Alertas de "perdido" destacadas</li>
+        <li>1 mascota</li>
+      </ul>
+      <a href="{% url 'orders:create_order' 'premium' %}" class="btn btn-primary"
+        style="display:block;margin-top:16px;">Comprar</a>
+    </div>
   </div>
 </div>
 
