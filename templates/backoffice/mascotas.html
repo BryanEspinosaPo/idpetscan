@@ -1,8 +1,21 @@
 {% extends "backoffice/base.html" %}
 {% block admin_content %}
-<div class="admin-head"><div><h2>Todas las mascotas</h2><p>{{ pets|length }} registradas</p></div></div>
+<div class="admin-head">
+  <div>
+    <h2>Todas las mascotas</h2>
+    <p>{{ pets|length }} registradas</p>
+  </div>
+</div>
 <table class="admin-table">
-  <thead><tr><th>Mascota</th><th>Dueño</th><th>Estado</th><th>Perdida</th><th>Código</th></tr></thead>
+  <thead>
+    <tr>
+      <th>Mascota</th>
+      <th>Dueño</th>
+      <th>Estado</th>
+      <th>Perdida</th>
+      <th>Código</th>
+    </tr>
+  </thead>
   <tbody>
     {% for pet in pets %}
     <tr>
@@ -14,10 +27,22 @@
       </td>
       <td>{{ pet.owner.username }}</td>
       <td>
-        <span class="admin-pill" style="{% if pet.status == 'approved' %}background:#DCF5EE;color:#0C7A5F;{% elif pet.status == 'pending' %}background:#FDF0DC;color:#A66A0A;{% else %}background:#FCEBEB;color:#A32D2D;{% endif %}">{{ pet.get_status_display }}</span>
+        <span class="admin-pill"
+          style="{% if pet.status == 'approved' %}background:#DCF5EE;color:#0C7A5F;{% elif pet.status == 'pending' %}background:#FDF0DC;color:#A66A0A;{% else %}background:#FCEBEB;color:#A32D2D;{% endif %}">{{
+          pet.get_status_display }}</span>
       </td>
-      <td>{% if pet.is_lost %}<span class="admin-pill" style="background:#FCEBEB;color:#A32D2D;">Sí</span>{% else %}—{% endif %}</td>
+      <td>{% if pet.is_lost %}<span class="admin-pill" style="background:#FCEBEB;color:#A32D2D;">Sí</span>{% else %}—{%
+        endif %}</td>
       <td style="font-family:monospace;font-size:11.5px;">{{ pet.public_code }}</td>
+      <td>
+        <form method="post" action="{% url 'backoffice:toggle_medical_history' pet.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="admin-pill"
+            style="border:none;cursor:pointer;{% if pet.clinical_history_enabled %}background:#DCF5EE;color:#0C7A5F;{% else %}background:#FCEBEB;color:#A32D2D;{% endif %}">
+            {% if pet.clinical_history_enabled %}Activada{% else %}Desactivada{% endif %}
+          </button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
   </tbody>

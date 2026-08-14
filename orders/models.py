@@ -3,6 +3,24 @@ import secrets
 from django.conf import settings
 from django.db import models
 
+PLAN_PRICES = {
+    "classic": 50000,
+    "premium": 85000,
+    "family": 135000,
+}
+
+PLAN_PET_LIMITS = {
+    "classic": 1,
+    "premium": 1,
+    "family": 2,
+}
+
+PLAN_MEDICAL_HISTORY = {
+    "classic": False,
+    "premium": True,
+    "family": True,
+}
+
 
 def generate_order_reference():
     return f"idpetscan-{secrets.token_hex(8)}"
@@ -10,9 +28,9 @@ def generate_order_reference():
 
 class Order(models.Model):
     PLAN_CHOICES = [
-        ("classic", "Clásica"),
-        ("family", "Familiar"),
+        ("classic", "Básico"),
         ("premium", "Premium"),
+        ("family", "Familiar"),
     ]
 
     PAYMENT_STATUS_CHOICES = [
@@ -32,9 +50,6 @@ class Order(models.Model):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders"
-    )
-    pet = models.OneToOneField(
-        "pets.Pet", on_delete=models.SET_NULL, null=True, blank=True, related_name="order"
     )
 
     plan = models.CharField(max_length=10, choices=PLAN_CHOICES, default="classic")
@@ -57,3 +72,15 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Orden #{self.pk} — {self.get_plan_display()} — {self.user}"
+
+    @property
+    def pet_limit(self):
+        return PLAN_PET_LIMITS.get(self.plan, 1)
+
+    @property
+    def pets_remaining(self):
+        return max(0, self.pet_limit - self.pets.count())
+
+    @property
+    def includes_medical_history(self):
+        return PLAN_MEDICAL_HISTORY.get(self.plan, False)

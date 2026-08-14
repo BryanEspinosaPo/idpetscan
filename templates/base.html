@@ -28,10 +28,19 @@
           <button type="submit" class="btn btn-ghost">Cerrar sesión</button>
         </form>
       {% else %}
-        <a href="{% url 'accounts:register' %}" class="btn btn-ghost">Registrarme</a>
-        <a href="{% url 'accounts:login' %}" class="btn btn-primary">Ingresar</a>
+        {% if request.resolver_match.url_name != 'register' %}
+          <a href="{% url 'accounts:register' %}" class="btn btn-ghost">Registrarme</a>
+        {% endif %}
+        {% if request.resolver_match.url_name != 'login' %}
+          <a href="{% url 'accounts:login' %}" class="btn btn-primary">Ingresar</a>
+        {% endif %}
       {% endif %}
     </div>
+  </div>
+
+  <div class="cookie-banner" id="cookie-banner" style="display:none;">
+    <p>Usamos cookies esenciales para el funcionamiento del sitio (mantener tu sesión iniciada). Al continuar navegando, aceptas nuestra <a href="{% url 'politica_datos' %}">Política de Tratamiento de Datos</a>.</p>
+    <button id="cookie-accept">Entendido</button>
   </div>
 
   {% block content %}{% endblock %}
@@ -40,6 +49,14 @@
     window.addEventListener('load', function () {
       var loader = document.getElementById('page-loader');
       setTimeout(function () { loader.classList.add('hidden'); }, 350);
+    });
+
+    if (!localStorage.getItem('idpetscan_cookies_accepted')) {
+      document.getElementById('cookie-banner').style.display = 'flex';
+    }
+    document.getElementById('cookie-accept').addEventListener('click', function () {
+      localStorage.setItem('idpetscan_cookies_accepted', 'true');
+      document.getElementById('cookie-banner').style.display = 'none';
     });
   </script>
 </body>

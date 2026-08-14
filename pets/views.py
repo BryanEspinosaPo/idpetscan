@@ -24,7 +24,10 @@ def home_view(request):
 
 @login_required
 def create_pet_view(request, order_id):
-    order = get_object_or_404(Order, id=order_id, user=request.user, payment_status="paid", pet__isnull=True)
+    order = get_object_or_404(Order, id=order_id, user=request.user, payment_status="paid")
+
+    if order.pets_remaining <= 0:
+        return redirect("pets:my_pets")
 
     if request.method == "POST":
         form = PetForm(request.POST, request.FILES)
@@ -32,14 +35,19 @@ def create_pet_view(request, order_id):
             pet = form.save(commit=False)
             pet.owner = request.user
             pet.status = "pending"
+            pet.order = order
+            pet.clinical_history_enabled = order.includes_medical_history
             pet.save()
-            order.pet = pet
-            order.save()
+
+            if order.pets_remaining > 0:
+                return redirect("pets:create_pet", order_id=order.id)
             return redirect("pets:pet_created", public_code=pet.public_code)
     else:
         form = PetForm()
 
-    return render(request, "pets/create_pet.html", {"form": form, "breed_choices": BREED_CHOICES, "order": order})
+    return render(request, "pets/create_pet.html", {
+        "form": form, "breed_choices": BREED_CHOICES, "order": order,
+    })
 
 
 def pet_created_view(request, public_code):

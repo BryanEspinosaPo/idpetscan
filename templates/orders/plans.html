@@ -1,23 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="pricing" style="border-radius:20px;">
-  <h2>Elige tu placa</h2>
+  <h2>Elige tu plan</h2>
   <div class="price-grid">
     <div class="price-card">
-      <h4>Clásica</h4><div class="amt">${{ plan_prices.classic }}</div>
-      <ul><li>Placa metálica grabada</li><li>Perfil digital ilimitado</li><li>1 mascota</li></ul>
+      <h4>Básico</h4><div class="amt">${{ plan_prices.classic }}</div>
+      <ul>{% for f in plan_features.classic %}<li>{{ f }}</li>{% endfor %}</ul>
       <a href="{% url 'orders:create_order' 'classic' %}" class="btn btn-primary" style="display:block;margin-top:16px;">Elegir</a>
     </div>
     <div class="price-card hi">
-      <h4>Familiar</h4><div class="amt">${{ plan_prices.family }}</div>
-      <ul><li>2 placas incluidas</li><li>Historial clínico completo</li><li>Soporte prioritario</li></ul>
-      <a href="{% url 'orders:create_order' 'family' %}" class="btn" style="display:block;margin-top:16px;background:var(--navy);color:#fff;">Elegir</a>
+      <h4>Premium</h4><div class="amt">${{ plan_prices.premium }}</div>
+      <ul>{% for f in plan_features.premium %}<li>{{ f }}</li>{% endfor %}</ul>
+      <a href="{% url 'orders:create_order' 'premium' %}" class="btn" style="display:block;margin-top:16px;background:var(--navy);color:#fff;">Elegir</a>
     </div>
     <div class="price-card">
-      <h4>Premium</h4><div class="amt">${{ plan_prices.premium }}</div>
-      <ul><li>Placa resistente al agua</li><li>Alertas de "perdido" destacadas</li><li>1 mascota</li></ul>
-      <a href="{% url 'orders:create_order' 'premium' %}" class="btn btn-primary" style="display:block;margin-top:16px;">Elegir</a>
+      <h4>Familiar</h4><div class="amt">${{ plan_prices.family }}</div>
+      <ul>{% for f in plan_features.family %}<li>{{ f }}</li>{% endfor %}</ul>
+      <a href="{% url 'orders:create_order' 'family' %}" class="btn btn-primary" style="display:block;margin-top:16px;">Elegir</a>
     </div>
+    <p style="text-align:center;font-size:12px;color:{% if 'orders' in request.path %}var(--muted){% else %}#8C97A6{% endif %};margin-top:20px;">
+    * Después del primer año, el mantenimiento del perfil digital tiene un costo de $25.000 anuales.
+  </p>
   </div>
 </div>
 {% endblock %}

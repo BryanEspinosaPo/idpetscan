@@ -57,6 +57,8 @@ class Pet(models.Model):
     photo = models.ImageField(upload_to="pets/", blank=True, null=True)
     qr_code = models.ImageField(upload_to="qr_codes/", blank=True, null=True)
     medical_access_code = models.CharField(max_length=6, blank=True, default=generate_medical_code, editable=False)
+    order = models.ForeignKey("orders.Order", on_delete=models.SET_NULL, null=True, blank=True, related_name="pets")
+    clinical_history_enabled = models.BooleanField(default=True, verbose_name="Historia clínica habilitada")
 
     # --- Contacto del dueño ---
     contact_name = models.CharField(max_length=100)

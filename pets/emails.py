@@ -4,17 +4,16 @@ from django.core.mail import EmailMessage
 
 
 def send_admin_notification(pet):
-    """
-    Le llega a ti (ADMIN_NOTIFICATION_EMAIL): nombre de la mascota,
-    celular de contacto y el QR adjunto, listo para producción de la placa.
-    """
     subject = f"Nueva placa aprobada: {pet.name}"
+    plan_line = f"Plan: {pet.order.get_plan_display()}\n" if pet.order else ""
     body = (
         f"Mascota: {pet.name}\n"
         f"Especie: {pet.get_species_display()}\n"
         f"Dueño: {pet.contact_name}\n"
         f"Celular de contacto: {pet.contact_phone}\n"
         f"Código público: {pet.public_code}\n"
+        f"{plan_line}"
+        f"Historia clínica incluida: {'Sí' if pet.clinical_history_enabled else 'No'}\n"
     )
 
     email = EmailMessage(
@@ -26,12 +25,16 @@ def send_admin_notification(pet):
         email.attach_file(pet.qr_code.path)
     email.send(fail_silently=False)
 
-
 def send_owner_status_email(pet):
-    """Le avisa al dueño si su mascota fue aprobada o rechazada."""
     if pet.status == "approved":
         subject = f"¡{pet.name} ya está publicado en IDPetScan!"
         body = f"Tu mascota {pet.name} fue aprobada. Ya puedes descargar y usar su QR."
+        if pet.clinical_history_enabled:
+            body += (
+                f"\n\nTu plan incluye historia clínica digital.\n"
+                f"Código de acceso al historial médico de {pet.name}: {pet.medical_access_code}\n"
+                f"Compártelo solo con quien deba consultarlo (veterinario, familiar, etc.)."
+            )
     else:
         subject = f"Tu solicitud para {pet.name} fue rechazada"
         body = f"Motivo: {pet.rejection_reason or 'No especificado'}"

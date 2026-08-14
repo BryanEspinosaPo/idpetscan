@@ -63,7 +63,7 @@
         <p class="k">Alergias</p>
         <p class="v">{{ pet.allergies|default:"Ninguna registrada" }}</p>
       </div>
-      {% if pet.medical_records.all %}
+      {% if pet.clinical_history_enabled and pet.medical_records.all %}
       <p class="profile-section-label">Historial clínico</p>
       {% if medical_unlocked %}
       {% for record in pet.medical_records.all %}

@@ -4,24 +4,18 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Order
+from .models import PLAN_PRICES, Order
 
-PLAN_PRICES = {
-    "classic": 45000,
-    "family": 95000,
-    "premium": 65000,
-}
-
-PLAN_LABELS = {
-    "classic": "Clásica",
-    "family": "Familiar",
-    "premium": "Premium",
+PLAN_FEATURES = {
+    "classic": ["Placa física", "Perfil público con QR", "1 mascota"],
+    "premium": ["Placa física", "Perfil público con QR", "Historia clínica", "Carnet tipo cédula", "1 mascota"],
+    "family": ["Todo lo del plan Premium", "2 perfiles de mascota", "2 placas físicas"],
 }
 
 
 @login_required
 def plans_view(request):
-    return render(request, "orders/plans.html", {"plan_prices": PLAN_PRICES})
+    return render(request, "orders/plans.html", {"plan_prices": PLAN_PRICES, "plan_features": PLAN_FEATURES})
 
 
 @login_required

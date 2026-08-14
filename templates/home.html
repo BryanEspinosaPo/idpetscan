@@ -112,47 +112,54 @@
 </div>
 
 <div class="pricing">
-  <h2>Elige tu placa</h2>
+  <h2>Elige tu plan</h2>
   <div class="price-grid">
     <div class="price-card">
-      <h4>Clásica</h4>
-      <div class="amt">$45.000</div>
+      <h4>Básico</h4>
+      <div class="amt">$50.000</div>
       <ul>
-        <li>Placa metálica grabada</li>
-        <li>Perfil digital ilimitado</li>
+        <li>Placa física</li>
+        <li>Perfil público con QR</li>
         <li>1 mascota</li>
       </ul>
       <a href="{% url 'orders:create_order' 'classic' %}" class="btn btn-primary"
         style="display:block;margin-top:16px;">Comprar</a>
     </div>
     <div class="price-card hi">
-      <h4>Familiar</h4>
-      <div class="amt">$95.000</div>
+      <h4>Premium</h4>
+      <div class="amt">$85.000</div>
       <ul>
-        <li>2 placas incluidas</li>
-        <li>Historial clínico completo</li>
-        <li>Soporte prioritario</li>
+        <li>Placa física</li>
+        <li>Perfil público con QR</li>
+        <li>Historia clínica</li>
+        <li>Carnet tipo cédula</li>
+        <li>1 mascota</li>
       </ul>
-      <a href="{% url 'orders:create_order' 'family' %}" class="btn"
+      <a href="{% url 'orders:create_order' 'premium' %}" class="btn"
         style="display:block;margin-top:16px;background:var(--navy);color:#fff;">Comprar</a>
     </div>
     <div class="price-card">
-      <h4>Premium</h4>
-      <div class="amt">$65.000</div>
+      <h4>Familiar</h4>
+      <div class="amt">$135.000</div>
       <ul>
-        <li>Placa resistente al agua</li>
-        <li>Alertas de "perdido" destacadas</li>
-        <li>1 mascota</li>
+        <li>Todo lo del plan Premium</li>
+        <li>2 perfiles de mascota</li>
+        <li>2 placas físicas</li>
       </ul>
-      <a href="{% url 'orders:create_order' 'premium' %}" class="btn btn-primary"
+      <a href="{% url 'orders:create_order' 'family' %}" class="btn btn-primary"
         style="display:block;margin-top:16px;">Comprar</a>
     </div>
   </div>
+  <p
+    style="text-align:center;font-size:12px;color:{% if 'orders' in request.path %}var(--muted){% else %}#8C97A6{% endif %};margin-top:20px;">
+    * Después del primer año, el mantenimiento del perfil digital tiene un costo de $25.000 anuales.
+  </p>
 </div>
 
 <div class="foot">
   <span>© IDPetScan · Identidad digital para mascotas</span>
-  <span><a href="#">Política de tratamiento de datos</a> · <a href="#">Términos</a></span>
+  <span><a href="{% url 'politica_datos' %}">Política de tratamiento de datos</a> · <a
+      href="{% url 'terminos' %}">Términos y condiciones</a></span>
 </div>
 {% endblock %}
 EOF

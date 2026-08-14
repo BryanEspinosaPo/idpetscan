@@ -1,20 +1,20 @@
-cat > templates/pets/edit_pet.html << 'EOF' {% extends "base.html" %} {% block content %} <div
-  class="form-shell form-shell-wide">
+{% extends "base.html" %}
+{% block content %}
+<div class="form-shell form-shell-wide">
   <h2>Editar a {{ pet.name }}</h2>
   <p class="sub">Los cambios se publican de inmediato.</p>
 
   {% if form.errors %}
-  <ul class="error-list">{% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{%
-    endfor %}{% endfor %}</ul>
+    <ul class="error-list">{% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}{% endfor %}</ul>
   {% endif %}
 
   <div class="edit-layout">
     <div class="edit-photo-side">
       <p class="edit-photo-label">Foto actual</p>
       {% if pet.photo %}
-      <img src="{{ pet.photo.url }}" id="photo-preview" class="edit-photo-preview">
+        <img src="{{ pet.photo.url }}" id="photo-preview" class="edit-photo-preview">
       {% else %}
-      <div id="photo-preview-placeholder" class="edit-photo-preview edit-photo-placeholder">Sin foto</div>
+        <div id="photo-preview-placeholder" class="edit-photo-preview edit-photo-placeholder">Sin foto</div>
       {% endif %}
     </div>
 
@@ -33,10 +33,9 @@ cat > templates/pets/edit_pet.html << 'EOF' {% extends "base.html" %} {% block c
               <select id="breed-select">
                 <option value="">Selecciona...</option>
                 {% for b in breed_choices %}
-                <option value="{{ b }}" {% if pet.breed==b %}selected{% endif %}>{{ b }}</option>
+                  <option value="{{ b }}" {% if pet.breed == b %}selected{% endif %}>{{ b }}</option>
                 {% endfor %}
-                <option value="Otro" {% if pet.breed and pet.breed not in breed_choices %}selected{% endif %}>Otro
-                </option>
+                <option value="Otro" {% if pet.breed and pet.breed not in breed_choices %}selected{% endif %}>Otro</option>
               </select>
               <input type="text" id="breed-other" placeholder="Especifica la raza"
                 value="{% if pet.breed and pet.breed not in breed_choices %}{{ pet.breed }}{% endif %}"
@@ -76,8 +75,7 @@ cat > templates/pets/edit_pet.html << 'EOF' {% extends "base.html" %} {% block c
           </button>
           <div style="display:none;">{{ form.is_lost }}</div>
 
-          <div id="lost-fields-panel" class="lost-fields-panel"
-            style="{% if not pet.is_lost %}display:none;{% endif %}">
+          <div id="lost-fields-panel" class="lost-fields-panel" style="{% if not pet.is_lost %}display:none;{% endif %}">
             <div class="form-grid">
               <p class="full">{{ form.last_seen_location.label }}<br>{{ form.last_seen_location }}</p>
               <p>{{ form.last_seen_date.label }}<br>{{ form.last_seen_date }}</p>
@@ -89,12 +87,13 @@ cat > templates/pets/edit_pet.html << 'EOF' {% extends "base.html" %} {% block c
         </form>
       </div>
 
+      {% if pet.clinical_history_enabled %}
       <div class="medical-history">
         <div class="profile-code-badge" style="text-align:left;margin-bottom:16px;">
           Código de acceso al historial médico: <b>{{ pet.medical_access_code }}</b>
-          <br><span style="font-size:11px;">Compártelo solo con quien deba ver el historial (veterinario, familiar,
-            etc.)</span>
+          <br><span style="font-size:11px;">Compártelo solo con quien deba ver el historial (veterinario, familiar, etc.)</span>
         </div>
+
         <p class="form-section-title">🩺 Historial de novedades clínicas</p>
 
         <form method="post" action="{% url 'pets:add_medical_record' pet.pk %}" class="medical-add-form">
@@ -107,70 +106,70 @@ cat > templates/pets/edit_pet.html << 'EOF' {% extends "base.html" %} {% block c
         </form>
 
         {% if medical_records %}
-        <div class="medical-timeline">
-          {% for record in medical_records %}
-          <div class="medical-item">
-            <span class="medical-date">{{ record.date|date:"d M Y" }}</span>
-            <p class="medical-desc">{{ record.description }}</p>
+          <div class="medical-timeline">
+            {% for record in medical_records %}
+            <div class="medical-item">
+              <span class="medical-date">{{ record.date|date:"d M Y" }}</span>
+              <p class="medical-desc">{{ record.description }}</p>
+            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
-        </div>
         {% else %}
-        <p style="color:var(--muted);font-size:12.5px;">Todavía no hay novedades registradas.</p>
+          <p style="color:var(--muted);font-size:12.5px;">Todavía no hay novedades registradas.</p>
         {% endif %}
       </div>
+      {% endif %}
     </div>
   </div>
-  </div>
+</div>
 
-  <script>
-    const breedSelect = document.getElementById('breed-select');
-    const breedOther = document.getElementById('breed-other');
-    function syncBreed() {
-      if (breedSelect.value === 'Otro') {
-        breedOther.style.display = 'block';
-        breedSelect.removeAttribute('name');
-        breedOther.setAttribute('name', 'breed');
-      } else {
-        breedOther.style.display = 'none';
-        breedSelect.setAttribute('name', 'breed');
-        breedOther.removeAttribute('name');
-      }
-    }
-    breedSelect.addEventListener('change', syncBreed);
-    syncBreed();
+<script>
+const breedSelect = document.getElementById('breed-select');
+const breedOther = document.getElementById('breed-other');
+function syncBreed() {
+  if (breedSelect.value === 'Otro') {
+    breedOther.style.display = 'block';
+    breedSelect.removeAttribute('name');
+    breedOther.setAttribute('name', 'breed');
+  } else {
+    breedOther.style.display = 'none';
+    breedSelect.setAttribute('name', 'breed');
+    breedOther.removeAttribute('name');
+  }
+}
+breedSelect.addEventListener('change', syncBreed);
+syncBreed();
 
-    const lostToggleBtn = document.getElementById('lost-toggle-btn');
-    const lostFieldsPanel = document.getElementById('lost-fields-panel');
-    const lostCheckbox = document.getElementById('id_is_lost_toggle');
-    lostToggleBtn.addEventListener('click', function () {
-      lostCheckbox.checked = !lostCheckbox.checked;
-      const active = lostCheckbox.checked;
-      lostToggleBtn.classList.toggle('active', active);
-      lostToggleBtn.textContent = active ? '⚠ Marcada como perdida — toca para quitar' : 'Marcar como perdida';
-      lostFieldsPanel.style.display = active ? 'block' : 'none';
-    });
+const lostToggleBtn = document.getElementById('lost-toggle-btn');
+const lostFieldsPanel = document.getElementById('lost-fields-panel');
+const lostCheckbox = document.getElementById('id_is_lost_toggle');
+lostToggleBtn.addEventListener('click', function () {
+  lostCheckbox.checked = !lostCheckbox.checked;
+  const active = lostCheckbox.checked;
+  lostToggleBtn.classList.toggle('active', active);
+  lostToggleBtn.textContent = active ? '⚠ Marcada como perdida — toca para quitar' : 'Marcar como perdida';
+  lostFieldsPanel.style.display = active ? 'block' : 'none';
+});
 
-    const photoInput = document.querySelector('input[name="photo"]');
-    if (photoInput) {
-      photoInput.addEventListener('change', function () {
-        if (photoInput.files && photoInput.files[0]) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            let img = document.getElementById('photo-preview');
-            if (!img) {
-              const placeholder = document.getElementById('photo-preview-placeholder');
-              img = document.createElement('img');
-              img.id = 'photo-preview';
-              img.className = 'edit-photo-preview';
-              placeholder.replaceWith(img);
-            }
-            img.src = e.target.result;
-          };
-          reader.readAsDataURL(photoInput.files[0]);
+const photoInput = document.querySelector('input[name="photo"]');
+if (photoInput) {
+  photoInput.addEventListener('change', function () {
+    if (photoInput.files && photoInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        let img = document.getElementById('photo-preview');
+        if (!img) {
+          const placeholder = document.getElementById('photo-preview-placeholder');
+          img = document.createElement('img');
+          img.id = 'photo-preview';
+          img.className = 'edit-photo-preview';
+          placeholder.replaceWith(img);
         }
-      });
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(photoInput.files[0]);
     }
-  </script>
-  {% endblock %}
-  EOF
+  });
+}
+</script>
+{% endblock %}

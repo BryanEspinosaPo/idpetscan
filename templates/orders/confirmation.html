@@ -3,15 +3,28 @@
 <div class="form-shell" style="text-align:center;margin-top:60px;">
   {% if order.payment_status == 'paid' %}
     <h2 style="color:#0C7A5F;">¡Pago confirmado! ✅</h2>
-    <p class="sub">Ahora completa el perfil de tu mascota para terminar el proceso.</p>
-    <a href="{% url 'pets:create_pet' order.id %}" class="btn btn-primary">Registrar mi mascota →</a>
+    {% if order.pets.all %}
+      <p class="sub">Mascotas registradas en esta orden: {{ order.pets.count }} de {{ order.pet_limit }}</p>
+      <div class="mypets-wrapper" style="margin:0 auto 20px;padding:0;">
+        {% for pet in order.pets.all %}
+          <div class="pet-row"><div class="info"><p class="name">{{ pet.name }}</p></div></div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% if order.pets_remaining > 0 %}
+      <a href="{% url 'pets:create_pet' order.id %}" class="btn btn-primary">
+        {% if order.pets.count > 0 %}Registrar mi siguiente mascota →{% else %}Registrar mi mascota →{% endif %}
+      </a>
+    {% else %}
+      <p class="sub">Ya registraste todas las mascotas incluidas en este plan.</p>
+      <a href="{% url 'pets:my_pets' %}" class="btn btn-primary">Ver mis mascotas →</a>
+    {% endif %}
   {% elif order.payment_status == 'pending' %}
     <h2>Esperando confirmación de pago</h2>
-    <p class="sub">Escríbenos por WhatsApp con tu código de orden <b>{{ order.reference }}</b> si aún no lo has hecho. Apenas confirmemos tu pago, esta página se actualizará.</p>
+    <p class="sub">Escríbenos por WhatsApp con tu código de orden <b>{{ order.reference }}</b> si aún no lo has hecho.</p>
     <a href="{% url 'orders:checkout' order.id %}" class="btn btn-ghost">Volver a ver instrucciones</a>
   {% else %}
     <h2 style="color:#A32D2D;">Esta orden fue marcada como fallida</h2>
-    <p class="sub">Puedes crear una nueva orden cuando quieras.</p>
     <a href="{% url 'orders:plans' %}" class="btn btn-primary">Volver a intentar</a>
   {% endif %}
 </div>

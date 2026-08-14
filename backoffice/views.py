@@ -78,3 +78,11 @@ def mark_order_paid_view(request, pk):
     order.payment_status = "paid"
     order.save()
     return redirect("backoffice:ordenes")
+
+@user_passes_test(is_staff, login_url="backoffice:login")
+@require_POST
+def toggle_medical_history_view(request, pk):
+    pet = get_object_or_404(Pet, pk=pk)
+    pet.clinical_history_enabled = not pet.clinical_history_enabled
+    pet.save()
+    return redirect("backoffice:mascotas")

@@ -2,7 +2,8 @@
 {% block content %}
 <div class="auth-wrapper">
   <div class="auth-side">
-    <img src="{% load static %}{% static 'img/blanco-idpet-cuadrado.png' %}" alt="IDPetScan" style="width:320px;margin-bottom:24px;">
+    <img src="{% load static %}{% static 'img/blanco-idpet-cuadrado.png' %}" alt="IDPetScan"
+      style="width:320px;margin-bottom:24px;">
     <p class="quote">"Desde que Rocky tiene su placa, cualquiera que lo encuentre me escribe en segundos."</p>
     <p class="quote-author">Camila Rojas, dueña de Rocky</p>
   </div>
@@ -13,10 +14,25 @@
     <form method="post">
       {% csrf_token %}
       <div class="field"><label>Usuario</label>{{ form.username }}</div>
-      <div class="field"><label>Contraseña</label>{{ form.password }}</div>
-      <button type="submit" class="auth-btn">Ingresar</button>
-    </form>
-    <p class="auth-alt">¿No tienes cuenta? <a href="{% url 'accounts:register' %}">Regístrate gratis</a></p>
+      <div class="field">
+        <label>Contraseña</label>
+        <div style="position:relative;">
+          {{ form.password }}
+          <button type="button" id="toggle-password"
+            style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:12px;color:var(--muted);">Mostrar</button>
+        </div>
   </div>
+  <button type="submit" class="auth-btn">Ingresar</button>
+  </form>
+  <p class="auth-alt">¿No tienes cuenta? <a href="{% url 'accounts:register' %}">Regístrate gratis</a></p>
 </div>
+</div>
+<script>
+  document.getElementById('toggle-password').addEventListener('click', function () {
+    const input = document.querySelector('input[name="password"]');
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    this.textContent = isPassword ? 'Ocultar' : 'Mostrar';
+  });
+</script>
 {% endblock %}
