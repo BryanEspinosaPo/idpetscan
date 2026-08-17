@@ -59,6 +59,8 @@ class Pet(models.Model):
     medical_access_code = models.CharField(max_length=6, blank=True, default=generate_medical_code, editable=False)
     order = models.ForeignKey("orders.Order", on_delete=models.SET_NULL, null=True, blank=True, related_name="pets")
     clinical_history_enabled = models.BooleanField(default=True, verbose_name="Historia clínica habilitada")
+    renewal_due_date = models.DateField(null=True, blank=True, verbose_name="Vencimiento del mantenimiento anual")
+    subscription_active = models.BooleanField(default=True, verbose_name="Suscripción activa")
 
     # --- Contacto del dueño ---
     contact_name = models.CharField(max_length=100)
@@ -97,6 +99,15 @@ class Pet(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+    @property
+    def is_subscription_valid(self):
+        from datetime import date
+        if not self.subscription_active:
+            return False
+        if self.renewal_due_date and date.today() > self.renewal_due_date:
+            return False
+        return True
 
     def __str__(self):
         return f"{self.name} ({self.get_species_display()})"

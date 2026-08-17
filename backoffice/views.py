@@ -86,3 +86,14 @@ def toggle_medical_history_view(request, pk):
     pet.clinical_history_enabled = not pet.clinical_history_enabled
     pet.save()
     return redirect("backoffice:mascotas")
+
+@user_passes_test(is_staff, login_url="backoffice:login")
+@require_POST
+def renew_subscription_view(request, pk):
+    from datetime import date, timedelta
+    pet = get_object_or_404(Pet, pk=pk)
+    base_date = pet.renewal_due_date if pet.renewal_due_date and pet.renewal_due_date > date.today() else date.today()
+    pet.renewal_due_date = base_date + timedelta(days=365)
+    pet.subscription_active = True
+    pet.save()
+    return redirect("backoffice:mascotas")

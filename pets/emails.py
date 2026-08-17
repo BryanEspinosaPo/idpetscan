@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.core.mail import EmailMessage
 
@@ -25,19 +24,22 @@ def send_admin_notification(pet):
         email.attach_file(pet.qr_code.path)
     email.send(fail_silently=False)
 
+
 def send_owner_status_email(pet):
-    if pet.status == "approved":
-        subject = f"¡{pet.name} ya está publicado en IDPetScan!"
-        body = f"Tu mascota {pet.name} fue aprobada. Ya puedes descargar y usar su QR."
-        if pet.clinical_history_enabled:
-            body += (
-                f"\n\nTu plan incluye historia clínica digital.\n"
-                f"Código de acceso al historial médico de {pet.name}: {pet.medical_access_code}\n"
-                f"Compártelo solo con quien deba consultarlo (veterinario, familiar, etc.)."
-            )
-    else:
-        subject = f"Tu solicitud para {pet.name} fue rechazada"
-        body = f"Motivo: {pet.rejection_reason or 'No especificado'}"
+    subject = f"¡{pet.name} ya está publicado en IDPetScan!"
+    body = (
+        f"Tu mascota {pet.name} ya está publicada.\n\n"
+        f"Código de identificación público: {pet.public_code}\n"
+        f"Perfil: https://idpetscan.com/p/{pet.public_code}/\n"
+    )
+    if pet.clinical_history_enabled:
+        body += (
+            f"\nTu plan incluye historia clínica digital.\n"
+            f"Código de acceso al historial médico: {pet.medical_access_code}\n"
+            f"Compártelo solo con quien deba consultarlo (veterinario, familiar, etc.).\n"
+        )
+    if pet.renewal_due_date:
+        body += f"\nEl mantenimiento anual de este perfil vence el {pet.renewal_due_date.strftime('%d/%m/%Y')}.\n"
 
     if pet.contact_email:
         EmailMessage(subject=subject, body=body, to=[pet.contact_email]).send(fail_silently=True)

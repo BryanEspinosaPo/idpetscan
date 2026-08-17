@@ -24,6 +24,11 @@ def home_view(request):
 
 @login_required
 def create_pet_view(request, order_id):
+    from datetime import date, timedelta
+    from django.utils import timezone
+    from .emails import send_admin_notification, send_owner_status_email
+    from .utils import generate_qr_for_pet
+
     order = get_object_or_404(Order, id=order_id, user=request.user, payment_status="paid")
 
     if order.pets_remaining <= 0:
@@ -34,10 +39,18 @@ def create_pet_view(request, order_id):
         if form.is_valid():
             pet = form.save(commit=False)
             pet.owner = request.user
-            pet.status = "pending"
+            pet.status = "approved"
+            pet.approved_at = timezone.now()
             pet.order = order
             pet.clinical_history_enabled = order.includes_medical_history
+            pet.renewal_due_date = date.today() + timedelta(days=365)
+            pet.subscription_active = True
             pet.save()
+
+            generate_qr_for_pet(pet)
+            pet.save()
+            send_admin_notification(pet)
+            send_owner_status_email(pet)
 
             if order.pets_remaining > 0:
                 return redirect("pets:create_pet", order_id=order.id)
@@ -57,7 +70,9 @@ def pet_created_view(request, public_code):
 @login_required
 def my_pets_view(request):
     pets = Pet.objects.filter(owner=request.user)
-    return render(request, "pets/my_pets.html", {"pets": pets})
+    paid_orders = Order.objects.filter(user=request.user, payment_status="paid")
+    available_orders = [o for o in paid_orders if o.pets_remaining > 0]
+    return render(request, "pets/my_pets.html", {"pets": pets, "available_orders": available_orders})
 
 
 @login_required
@@ -95,6 +110,8 @@ def add_medical_record_view(request, pk):
 
 def public_profile_view(request, public_code):
     pet = get_object_or_404(Pet, public_code=public_code, status="approved")
+    if not pet.is_subscription_valid:
+        return render(request, "pets/profile_inactive.html", {"pet": pet})
     session_key = f"medical_unlocked_{public_code}"
     unlocked = request.session.get(session_key, False)
     return render(request, "pets/public_profile.html", {"pet": pet, "medical_unlocked": unlocked})

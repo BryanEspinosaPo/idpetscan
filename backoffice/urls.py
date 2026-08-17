@@ -11,6 +11,7 @@ urlpatterns = [
     path("solicitudes/<int:pk>/rechazar/", views.reject_pet_view, name="reject_pet"),
     path("mascotas/", views.mascotas_view, name="mascotas"),
     path("mascotas/<int:pk>/historia-clinica/", views.toggle_medical_history_view, name="toggle_medical_history"),
+    path("mascotas/<int:pk>/renovar/", views.renew_subscription_view, name="renew_subscription"),
     path("usuarios/", views.usuarios_view, name="usuarios"),
     path("ordenes/", views.ordenes_view, name="ordenes"),
     path("ordenes/<int:pk>/marcar-pagada/", views.mark_order_paid_view, name="mark_order_paid"),

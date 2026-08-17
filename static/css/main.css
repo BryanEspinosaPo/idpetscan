@@ -313,3 +313,11 @@ a{color:inherit;}
 @media (max-width:600px){
   .cookie-banner{flex-direction:column;text-align:center;padding:16px;}
 }
+
+
+/* ---------- Placas pagadas pendientes de registrar ---------- */
+.pending-orders-box{background:#E1F5EE;border:1.5px solid #0C7A5F;border-radius:14px;padding:16px;margin-bottom:24px;}
+.pending-order-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;border-top:1px solid rgba(12,122,95,.15);flex-wrap:wrap;}
+.pending-order-row:first-of-type{border-top:none;}
+.pending-order-row .name{font-weight:600;margin:0;color:#0C7A5F;}
+.pending-order-row .species{font-size:12px;color:#0C7A5F;opacity:.8;margin:2px 0 0;}

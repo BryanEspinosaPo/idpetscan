@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="mypets-wrapper">
+  {% if available_orders %}
+    <div class="pending-orders-box">
+      <p class="profile-section-label" style="margin-top:0;">Placas pagadas — pendientes de registrar</p>
+      {% for order in available_orders %}
+        <div class="pending-order-row">
+          <div>
+            <p class="name">Plan {{ order.get_plan_display }}</p>
+            <p class="species">Te quedan {{ order.pets_remaining }} de {{ order.pet_limit }} mascota{{ order.pet_limit|pluralize }} por registrar</p>
+          </div>
+          <a href="{% url 'pets:create_pet' order.id %}" class="btn btn-primary">Registrar ahora</a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <div class="mypets-header">
     <h2>Mis mascotas</h2>
-    <a href="{% url 'orders:plans' %}" class="btn btn-primary">+ Nueva mascota</a>
+    <a href="{% url 'orders:plans' %}" class="btn btn-primary">+ Comprar otra placa</a>
   </div>
 
   {% if pets %}
