@@ -61,6 +61,7 @@ class Pet(models.Model):
     clinical_history_enabled = models.BooleanField(default=True, verbose_name="Historia clínica habilitada")
     renewal_due_date = models.DateField(null=True, blank=True, verbose_name="Vencimiento del mantenimiento anual")
     subscription_active = models.BooleanField(default=True, verbose_name="Suscripción activa")
+    renewal_reminder_sent = models.BooleanField(default=False, verbose_name="Recordatorio de renovación enviado")
 
     # --- Contacto del dueño ---
     contact_name = models.CharField(max_length=100)

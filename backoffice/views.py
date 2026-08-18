@@ -95,5 +95,18 @@ def renew_subscription_view(request, pk):
     base_date = pet.renewal_due_date if pet.renewal_due_date and pet.renewal_due_date > date.today() else date.today()
     pet.renewal_due_date = base_date + timedelta(days=365)
     pet.subscription_active = True
+    pet.renewal_reminder_sent = False
     pet.save()
     return redirect("backoffice:mascotas")
+
+
+@user_passes_test(is_staff, login_url="backoffice:login")
+@require_POST
+def update_order_view(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    order.production_status = request.POST.get("production_status", order.production_status)
+    order.shipping_address = request.POST.get("shipping_address", order.shipping_address)
+    order.shipping_city = request.POST.get("shipping_city", order.shipping_city)
+    order.tracking_number = request.POST.get("tracking_number", order.tracking_number)
+    order.save()
+    return redirect("backoffice:ordenes")

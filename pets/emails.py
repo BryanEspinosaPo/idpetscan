@@ -43,3 +43,17 @@ def send_owner_status_email(pet):
 
     if pet.contact_email:
         EmailMessage(subject=subject, body=body, to=[pet.contact_email]).send(fail_silently=True)
+
+
+def send_renewal_reminder_email(pet):
+    subject = f"Recuerda renovar el mantenimiento de {pet.name}"
+    body = (
+        f"Hola,\n\n"
+        f"El mantenimiento anual del perfil de {pet.name} vence el "
+        f"{pet.renewal_due_date.strftime('%d/%m/%Y')}.\n\n"
+        f"El costo de la renovación es de $25.000. Escríbenos por WhatsApp para coordinar el pago "
+        f"y evitar que el perfil público de {pet.name} se desactive.\n\n"
+        f"Código de identificación: {pet.public_code}"
+    )
+    if pet.contact_email:
+        EmailMessage(subject=subject, body=body, to=[pet.contact_email]).send(fail_silently=True)

@@ -64,6 +64,10 @@ class Order(models.Model):
 
     payment_reference = models.CharField(max_length=100, blank=True)
 
+    shipping_address = models.CharField(max_length=255, blank=True, verbose_name="Dirección de envío")
+    shipping_city = models.CharField(max_length=100, blank=True, verbose_name="Ciudad")
+    tracking_number = models.CharField(max_length=100, blank=True, verbose_name="Número de guía")
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

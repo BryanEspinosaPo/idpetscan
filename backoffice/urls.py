@@ -14,5 +14,6 @@ urlpatterns = [
     path("mascotas/<int:pk>/renovar/", views.renew_subscription_view, name="renew_subscription"),
     path("usuarios/", views.usuarios_view, name="usuarios"),
     path("ordenes/", views.ordenes_view, name="ordenes"),
+    path("ordenes/<int:pk>/actualizar/", views.update_order_view, name="update_order"),
     path("ordenes/<int:pk>/marcar-pagada/", views.mark_order_paid_view, name="mark_order_paid"),
 ]

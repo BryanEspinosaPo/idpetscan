@@ -3,7 +3,7 @@
 <div class="admin-head"><div><h2>Órdenes de placas</h2><p>{{ orders|length }} órdenes</p></div></div>
 {% if orders %}
 <table class="admin-table">
-  <thead><tr><th>Código</th><th>Cliente</th><th>Plan</th><th>Pago</th><th>Total</th><th></th></tr></thead>
+  <thead><tr><th>Código</th><th>Cliente</th><th>Plan</th><th>Pago</th><th>Total</th><th>Producción</th><th></th></tr></thead>
   <tbody>
     {% for order in orders %}
     <tr>
@@ -15,14 +15,48 @@
       </td>
       <td>${{ order.amount }}</td>
       <td>
+        <span class="admin-pill" style="{% if order.production_status == 'delivered' %}background:#DCF5EE;color:#0C7A5F;{% elif order.production_status == 'shipped' %}background:#E6F1FB;color:#185FA5;{% elif order.production_status == 'in_production' %}background:#FDF0DC;color:#A66A0A;{% else %}background:#F1EFE8;color:#5F5E5A;{% endif %}">{{ order.get_production_status_display }}</span>
+      </td>
+      <td>
         {% if order.payment_status == 'pending' %}
-        <form method="post" action="{% url 'backoffice:mark_order_paid' order.pk %}">
+        <form method="post" action="{% url 'backoffice:mark_order_paid' order.pk %}" style="display:inline;">
           {% csrf_token %}
           <button type="submit" class="admin-btn-approve">Confirmar pago</button>
         </form>
         {% endif %}
+        {% if order.payment_status == 'paid' %}
+        <button type="button" class="admin-btn-reject" onclick="document.getElementById('ship-{{ order.pk }}').classList.toggle('open')">Envío</button>
+        {% endif %}
       </td>
     </tr>
+    {% if order.payment_status == 'paid' %}
+    <tr id="ship-{{ order.pk }}" class="ship-row">
+      <td colspan="7">
+        <form method="post" action="{% url 'backoffice:update_order' order.pk %}" class="ship-form">
+          {% csrf_token %}
+          <div class="ship-form-grid">
+            <label>Estado de producción
+              <select name="production_status">
+                {% for value, label in order.PRODUCTION_STATUS_CHOICES %}
+                  <option value="{{ value }}" {% if order.production_status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <label>Ciudad
+              <input type="text" name="shipping_city" value="{{ order.shipping_city }}">
+            </label>
+            <label class="full">Dirección de envío
+              <input type="text" name="shipping_address" value="{{ order.shipping_address }}">
+            </label>
+            <label>Número de guía
+              <input type="text" name="tracking_number" value="{{ order.tracking_number }}">
+            </label>
+          </div>
+          <button type="submit" class="admin-btn-approve" style="margin-top:10px;">Guardar</button>
+        </form>
+      </td>
+    </tr>
+    {% endif %}
     {% endfor %}
   </tbody>
 </table>
