@@ -14,6 +14,7 @@
       <th>Estado</th>
       <th>Perdida</th>
       <th>Código</th>
+      <th>Mantenimiento</th>
     </tr>
   </thead>
   <tbody>
@@ -42,6 +43,17 @@
             {% if pet.clinical_history_enabled %}Activada{% else %}Desactivada{% endif %}
           </button>
         </form>
+      </td>
+      <td>
+        <span class="admin-pill" style="{% if pet.is_subscription_valid %}background:#DCF5EE;color:#0C7A5F;{% else %}background:#FCEBEB;color:#A32D2D;{% endif %}">
+          {% if pet.renewal_due_date %}{{ pet.renewal_due_date|date:"d M Y" }}{% else %}Sin fecha{% endif %}
+        </span>
+        {% if not pet.is_subscription_valid %}
+        <form method="post" action="{% url 'backoffice:renew_subscription' pet.pk %}" style="display:inline;margin-left:6px;">
+          {% csrf_token %}
+          <button type="submit" class="admin-btn-approve" style="padding:4px 10px;font-size:10.5px;">Renovar</button>
+        </form>
+        {% endif %}
       </td>
     </tr>
     {% endfor %}

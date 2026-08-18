@@ -6,103 +6,109 @@
     <div class="step-dot" data-step="2"></div>
     <div class="step-dot" data-step="3"></div>
   </div>
-  <<h2>Registra a tu mascota</h2>
-    {% if order.pet_limit > 1 %}
+  <h2>Registra a tu mascota</h2>
+  {% if order.pet_limit > 1 %}
     <p class="sub" style="color:var(--teal);font-weight:600;">
       Mascota {{ order.pets.count|add:1 }} de {{ order.pet_limit }} incluidas en tu plan {{ order.get_plan_display }}.
     </p>
-    {% endif %}
-    <p class="sub">Este perfil quedará en revisión hasta que lo aprobemos — normalmente en menos de 24 horas.</p>
+  {% endif %}
+  <p class="sub">Al enviarlo, el perfil de tu mascota queda publicado de inmediato.</p>
 
-    {% if form.errors %}
-    <ul class="error-list">{% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>
-      {% endfor %}{% endfor %}</ul>
-    {% endif %}
+  {% if form.errors %}
+    <ul class="error-list">{% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}{% endfor %}</ul>
+  {% endif %}
 
-    <div class="form-card">
-      <form method="post" enctype="multipart/form-data" id="pet-form">
-        {% csrf_token %}
+  <div class="form-card">
+    <form method="post" enctype="multipart/form-data" id="pet-form">
+      {% csrf_token %}
 
-        <!-- PASO 1: Datos de la mascota -->
-        <div class="form-step-panel active" data-panel="1">
-          <p class="form-section-title">🐾 Datos de la mascota</p>
+      <!-- PASO 1: Datos de la mascota -->
+      <div class="form-step-panel active" data-panel="1">
+        <p class="form-section-title">🐾 Datos de la mascota</p>
 
-          <div class="species-pills">
-            <div class="species-pill sel" data-value="dog">🐶 Perro</div>
-            <div class="species-pill" data-value="cat">🐱 Gato</div>
-            <div class="species-pill" data-value="other">🐦 Otro</div>
-          </div>
-          <div style="display:none;">{{ form.species }}</div>
+        <div class="species-pills">
+          <div class="species-pill sel" data-value="dog">🐶 Perro</div>
+          <div class="species-pill" data-value="cat">🐱 Gato</div>
+          <div class="species-pill" data-value="other">🐦 Otro</div>
+        </div>
+        <div style="display:none;">{{ form.species }}</div>
 
-          <div class="form-grid">
-            <p>{{ form.name.label }}<br>{{ form.name }}</p>
-            <p>
-              Raza<br>
-              <select id="breed-select">
-                <option value="">Selecciona...</option>
-                {% for b in breed_choices %}
-                <option value="{{ b }}">{{ b }}</option>
-                {% endfor %}
-                <option value="Otro">Otro</option>
-              </select>
-              <input type="text" id="breed-other" placeholder="Especifica la raza" style="display:none;margin-top:6px;">
-            </p>
-            <p>{{ form.sex.label }}<br>{{ form.sex }}</p>
-            <p>{{ form.birth_date.label }}<br>{{ form.birth_date }}</p>
-            <p>{{ form.color.label }}<br>{{ form.color }}</p>
-            <p>{{ form.size.label }}<br>{{ form.size }}</p>
-          </div>
+        <div class="form-grid">
+          <p>{{ form.name.label }}<br>{{ form.name }}</p>
 
-          <label class="photo-drop" id="photo-drop">
-            <span id="photo-drop-text">Arrastra una foto o haz clic para subir</span>
-            {{ form.photo }}
-          </label>
+          <p id="breed-select-wrapper">
+            Raza<br>
+            <select id="breed-select" name="breed"></select>
+            <input type="text" id="breed-other" placeholder="Especifica la raza" style="display:none;margin-top:6px;">
+          </p>
 
-          <div class="form-nav-buttons">
-            <span></span>
-            <button type="button" class="btn btn-primary" onclick="goToStep(2)">Siguiente</button>
-          </div>
+          <p>{{ form.sex.label }}<br>{{ form.sex }}</p>
+          <p>{{ form.birth_date.label }}<br>{{ form.birth_date }}</p>
+          <p>{{ form.color.label }}<br>{{ form.color }}</p>
+
+          <p>
+            Tamaño<br>
+            <select id="size-select" name="size">
+              <option value="">Selecciona...</option>
+              <option value="Pequeño">Pequeño</option>
+              <option value="Mediano">Mediano</option>
+              <option value="Grande">Grande</option>
+            </select>
+          </p>
         </div>
 
-        <!-- PASO 2: Contacto -->
-        <div class="form-step-panel" data-panel="2">
-          <p class="form-section-title">📞 Contacto del dueño</p>
-          <div class="form-grid">
-            <p>{{ form.contact_name.label }}<br>{{ form.contact_name }}</p>
-            <p>{{ form.contact_phone.label }}<br>{{ form.contact_phone }}</p>
-            <p>{{ form.contact_phone_alt.label }}<br>{{ form.contact_phone_alt }}</p>
-            <p>{{ form.contact_email.label }}<br>{{ form.contact_email }}</p>
-            <p class="full">{{ form.zone.label }}<br>{{ form.zone }}</p>
-          </div>
-          <div class="form-nav-buttons">
-            <button type="button" class="btn btn-ghost" onclick="goToStep(1)">Atrás</button>
-            <button type="button" class="btn btn-primary" onclick="goToStep(3)">Siguiente</button>
-          </div>
-        </div>
+        <label class="photo-drop" id="photo-drop">
+          <span id="photo-drop-text">Arrastra una foto o haz clic para subir</span>
+          {{ form.photo }}
+        </label>
 
-        <!-- PASO 3: Salud -->
-        <div class="form-step-panel" data-panel="3">
-          <p class="form-section-title">✚ Salud <span
-              style="font-weight:400;text-transform:none;color:var(--muted);font-size:11.5px;">— opcional</span></p>
-          <div class="form-grid">
-            <p>{{ form.vaccines_ok.label }} {{ form.vaccines_ok }}</p>
-            <p>{{ form.neutered.label }} {{ form.neutered }}</p>
-            <p class="full">{{ form.allergies.label }}<br>{{ form.allergies }}</p>
-            <p class="full">{{ form.medical_conditions.label }}<br>{{ form.medical_conditions }}</p>
-            <p class="full">{{ form.clinical_notes.label }}<br>{{ form.clinical_notes }}</p>
-            <p>{{ form.vet_name.label }}<br>{{ form.vet_name }}</p>
-            <p>{{ form.vet_phone.label }}<br>{{ form.vet_phone }}</p>
-          </div>
-          <div class="form-nav-buttons">
-            <button type="button" class="btn btn-ghost" onclick="goToStep(2)">Atrás</button>
-            <button type="submit" class="btn btn-primary">Enviar para revisión</button>
-          </div>
+        <div class="form-nav-buttons">
+          <span></span>
+          <button type="button" class="btn btn-primary" onclick="goToStep(2)">Siguiente</button>
         </div>
-      </form>
-    </div>
+      </div>
+
+      <!-- PASO 2: Contacto -->
+      <div class="form-step-panel" data-panel="2">
+        <p class="form-section-title">📞 Contacto del dueño</p>
+        <div class="form-grid">
+          <p>{{ form.contact_name.label }}<br>{{ form.contact_name }}</p>
+          <p>{{ form.contact_phone.label }}<br>{{ form.contact_phone }}</p>
+          <p>{{ form.contact_phone_alt.label }}<br>{{ form.contact_phone_alt }}</p>
+          <p>{{ form.contact_email.label }}<br>{{ form.contact_email }}</p>
+          <p class="full">{{ form.zone.label }}<br>{{ form.zone }}</p>
+        </div>
+        <div class="form-nav-buttons">
+          <button type="button" class="btn btn-ghost" onclick="goToStep(1)">Atrás</button>
+          <button type="button" class="btn btn-primary" onclick="goToStep(3)">Siguiente</button>
+        </div>
+      </div>
+
+      <!-- PASO 3: Salud -->
+      <div class="form-step-panel" data-panel="3">
+        <p class="form-section-title">✚ Salud <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:11.5px;">— opcional</span></p>
+        <div class="form-grid">
+          <p>{{ form.vaccines_ok.label }} {{ form.vaccines_ok }}</p>
+          <p>{{ form.neutered.label }} {{ form.neutered }}</p>
+          <p class="full">{{ form.allergies.label }}<br>{{ form.allergies }}</p>
+          <p class="full">{{ form.medical_conditions.label }}<br>{{ form.medical_conditions }}</p>
+          <p class="full">{{ form.clinical_notes.label }}<br>{{ form.clinical_notes }}</p>
+          <p>{{ form.vet_name.label }}<br>{{ form.vet_name }}</p>
+          <p>{{ form.vet_phone.label }}<br>{{ form.vet_phone }}</p>
+        </div>
+        <div class="form-nav-buttons">
+          <button type="button" class="btn btn-ghost" onclick="goToStep(2)">Atrás</button>
+          <button type="submit" class="btn btn-primary">Registrar mascota</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
+  const DOG_BREEDS = {{ dog_breeds_json|safe }};
+  const CAT_BREEDS = {{ cat_breeds_json|safe }};
+
   function goToStep(n) {
     document.querySelectorAll('.form-step-panel').forEach(p => p.classList.remove('active'));
     document.querySelector('[data-panel="' + n + '"]').classList.add('active');
@@ -112,17 +118,62 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Selector de especie (pills) -> sincroniza con el <select> real oculto
+  const breedSelect = document.getElementById('breed-select');
+  const breedOther = document.getElementById('breed-other');
+  const breedWrapper = document.getElementById('breed-select-wrapper');
+
+  function fillBreedOptions(species) {
+    breedSelect.innerHTML = '<option value="">Selecciona...</option>';
+    let list = [];
+    if (species === 'dog') list = DOG_BREEDS;
+    else if (species === 'cat') list = CAT_BREEDS;
+
+    if (species === 'other') {
+      breedSelect.style.display = 'none';
+      breedOther.style.display = 'block';
+      breedOther.setAttribute('name', 'breed');
+    } else {
+      breedSelect.style.display = 'inline-block';
+      list.forEach(b => {
+        const opt = document.createElement('option');
+        opt.value = b;
+        opt.textContent = b;
+        breedSelect.appendChild(opt);
+      });
+      const otroOpt = document.createElement('option');
+      otroOpt.value = 'Otro';
+      otroOpt.textContent = 'Otro';
+      breedSelect.appendChild(otroOpt);
+      breedOther.style.display = 'none';
+      breedSelect.setAttribute('name', 'breed');
+      breedOther.removeAttribute('name');
+    }
+  }
+
+  breedSelect.addEventListener('change', function () {
+    if (breedSelect.value === 'Otro') {
+      breedOther.style.display = 'block';
+      breedSelect.removeAttribute('name');
+      breedOther.setAttribute('name', 'breed');
+    } else {
+      breedOther.style.display = 'none';
+      breedSelect.setAttribute('name', 'breed');
+      breedOther.removeAttribute('name');
+    }
+  });
+
   document.querySelectorAll('.species-pill').forEach(pill => {
     pill.addEventListener('click', () => {
       document.querySelectorAll('.species-pill').forEach(p => p.classList.remove('sel'));
       pill.classList.add('sel');
       const select = document.querySelector('[name="species"]');
       if (select) select.value = pill.dataset.value;
+      fillBreedOptions(pill.dataset.value);
     });
   });
 
-  // Zona de foto: muestra el nombre del archivo elegido
+  fillBreedOptions('dog');
+
   const photoInput = document.querySelector('#photo-drop input[type=file]');
   if (photoInput) {
     photoInput.addEventListener('change', () => {
@@ -134,23 +185,9 @@
       }
     });
   }
+
   document.getElementById('pet-form').addEventListener('submit', function () {
     document.getElementById('page-loader').classList.remove('hidden');
   });
-  const breedSelect = document.getElementById('breed-select');
-  const breedOther = document.getElementById('breed-other');
-  function syncBreed() {
-    if (breedSelect.value === 'Otro') {
-      breedOther.style.display = 'block';
-      breedSelect.removeAttribute('name');
-      breedOther.setAttribute('name', 'breed');
-    } else {
-      breedOther.style.display = 'none';
-      breedSelect.setAttribute('name', 'breed');
-      breedOther.removeAttribute('name');
-    }
-  }
-  breedSelect.addEventListener('change', syncBreed);
-  syncBreed();
 </script>
 {% endblock %}

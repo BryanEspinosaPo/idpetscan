@@ -3,15 +3,23 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MedicalRecordForm, PetForm
 from .models import Pet
+import json
+
 from orders.models import Order
 
-BREED_CHOICES = [
+DOG_BREEDS = [
     "Mestizo / Criollo", "Labrador Retriever", "Golden Retriever", "Pastor Alemán",
     "Bulldog Francés", "Bulldog Inglés", "Caniche / Poodle", "Chihuahua", "Schnauzer",
     "Beagle", "Boxer", "Rottweiler", "Husky Siberiano", "Yorkshire Terrier", "Shih Tzu",
-    "Pug", "Dálmata", "Doberman", "Gato Criollo", "Gato Persa", "Gato Siamés",
-    "Gato Angora", "Maine Coon",
+    "Pug", "Dálmata", "Doberman", "Salchicha", "Cocker Spaniel", "Border Collie",
 ]
+
+CAT_BREEDS = [
+    "Gato Criollo", "Gato Persa", "Gato Siamés", "Gato Angora",
+    "Maine Coon", "Gato Sphynx", "Bengalí", "Ragdoll", "Británico de Pelo Corto",
+]
+
+BREED_CHOICES = DOG_BREEDS + CAT_BREEDS
 
 
 def home_view(request):
@@ -60,6 +68,7 @@ def create_pet_view(request, order_id):
 
     return render(request, "pets/create_pet.html", {
         "form": form, "breed_choices": BREED_CHOICES, "order": order,
+        "dog_breeds_json": json.dumps(DOG_BREEDS), "cat_breeds_json": json.dumps(CAT_BREEDS),
     })
 
 
@@ -93,6 +102,7 @@ def edit_pet_view(request, pk):
     return render(request, "pets/edit_pet.html", {
         "form": form, "pet": pet, "breed_choices": BREED_CHOICES,
         "medical_form": medical_form, "medical_records": medical_records,
+        "dog_breeds_json": json.dumps(DOG_BREEDS), "cat_breeds_json": json.dumps(CAT_BREEDS),
     })
 
 

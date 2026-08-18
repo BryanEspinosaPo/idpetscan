@@ -28,15 +28,9 @@
             <p>{{ form.name.label }}<br>{{ form.name }}</p>
             <p>{{ form.species.label }}<br>{{ form.species }}</p>
 
-            <p>
+            <p id="breed-select-wrapper">
               Raza<br>
-              <select id="breed-select">
-                <option value="">Selecciona...</option>
-                {% for b in breed_choices %}
-                  <option value="{{ b }}" {% if pet.breed == b %}selected{% endif %}>{{ b }}</option>
-                {% endfor %}
-                <option value="Otro" {% if pet.breed and pet.breed not in breed_choices %}selected{% endif %}>Otro</option>
-              </select>
+              <select id="breed-select" name="breed"></select>
               <input type="text" id="breed-other" placeholder="Especifica la raza"
                 value="{% if pet.breed and pet.breed not in breed_choices %}{{ pet.breed }}{% endif %}"
                 style="display:none;margin-top:6px;">
@@ -45,7 +39,15 @@
             <p>{{ form.sex.label }}<br>{{ form.sex }}</p>
             <p>{{ form.birth_date.label }}<br>{{ form.birth_date }}</p>
             <p>{{ form.color.label }}<br>{{ form.color }}</p>
-            <p>{{ form.size.label }}<br>{{ form.size }}</p>
+            <p>
+              Tamaño<br>
+              <select id="size-select" name="size">
+                <option value="">Selecciona...</option>
+                <option value="Pequeño" {% if pet.size == "Pequeño" %}selected{% endif %}>Pequeño</option>
+                <option value="Mediano" {% if pet.size == "Mediano" %}selected{% endif %}>Mediano</option>
+                <option value="Grande" {% if pet.size == "Grande" %}selected{% endif %}>Grande</option>
+              </select>
+            </p>
             <p class="full">{{ form.photo.label }}<br>{{ form.photo }}</p>
           </div>
 
@@ -124,9 +126,54 @@
 </div>
 
 <script>
+const DOG_BREEDS = {{ dog_breeds_json|safe }};
+const CAT_BREEDS = {{ cat_breeds_json|safe }};
+const CURRENT_BREED = "{{ pet.breed|default:'' }}";
+const CURRENT_SPECIES = "{{ pet.species }}";
+
 const breedSelect = document.getElementById('breed-select');
 const breedOther = document.getElementById('breed-other');
-function syncBreed() {
+const speciesSelect = document.querySelector('[name="species"]');
+
+function fillBreedOptions(species, preselect) {
+  breedSelect.innerHTML = '<option value="">Selecciona...</option>';
+  let list = [];
+  if (species === 'dog') list = DOG_BREEDS;
+  else if (species === 'cat') list = CAT_BREEDS;
+
+  if (species === 'other') {
+    breedSelect.style.display = 'none';
+    breedOther.style.display = 'block';
+    breedOther.setAttribute('name', 'breed');
+  } else {
+    breedSelect.style.display = 'inline-block';
+    list.forEach(function(b) {
+      const opt = document.createElement('option');
+      opt.value = b;
+      opt.textContent = b;
+      if (b === preselect) opt.selected = true;
+      breedSelect.appendChild(opt);
+    });
+    const otroOpt = document.createElement('option');
+    otroOpt.value = 'Otro';
+    otroOpt.textContent = 'Otro';
+    if (preselect && list.indexOf(preselect) === -1) otroOpt.selected = true;
+    breedSelect.appendChild(otroOpt);
+
+    if (preselect && list.indexOf(preselect) === -1) {
+      breedOther.style.display = 'block';
+      breedOther.value = preselect;
+      breedOther.setAttribute('name', 'breed');
+      breedSelect.removeAttribute('name');
+    } else {
+      breedOther.style.display = 'none';
+      breedSelect.setAttribute('name', 'breed');
+      breedOther.removeAttribute('name');
+    }
+  }
+}
+
+breedSelect.addEventListener('change', function () {
   if (breedSelect.value === 'Otro') {
     breedOther.style.display = 'block';
     breedSelect.removeAttribute('name');
@@ -136,9 +183,15 @@ function syncBreed() {
     breedSelect.setAttribute('name', 'breed');
     breedOther.removeAttribute('name');
   }
+});
+
+if (speciesSelect) {
+  speciesSelect.addEventListener('change', function () {
+    fillBreedOptions(speciesSelect.value, '');
+  });
 }
-breedSelect.addEventListener('change', syncBreed);
-syncBreed();
+
+fillBreedOptions(CURRENT_SPECIES, CURRENT_BREED);
 
 const lostToggleBtn = document.getElementById('lost-toggle-btn');
 const lostFieldsPanel = document.getElementById('lost-fields-panel');
