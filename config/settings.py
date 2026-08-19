@@ -4,11 +4,12 @@ Configuración del proyecto IDPetScan.
 
 import os
 from pathlib import Path
+
+import dj_database_url
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Carga las variables definidas en el archivo .env (no se sube a git)
 load_dotenv(BASE_DIR / ".env")
 
 # --------------------------------------------------------------------
@@ -17,6 +18,19 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("SECRET_KEY", "clave-insegura-solo-para-desarrollo")
 DEBUG = os.getenv("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+
+# Railway pone el dominio público en esta variable automáticamente
+RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN")
+if RAILWAY_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+
+CSRF_TRUSTED_ORIGINS = [f"https://{h}" for h in ALLOWED_HOSTS if h not in ("127.0.0.1", "localhost")]
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # --------------------------------------------------------------------
 # Apps instaladas
@@ -36,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -49,7 +64,6 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # Carpeta global de templates (además de las que trae cada app)
         "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -67,9 +81,15 @@ WSGI_APPLICATION = "config.wsgi.application"
 # --------------------------------------------------------------------
 # Base de datos
 # --------------------------------------------------------------------
-# En desarrollo, si no defines DB_NAME en .env, cae a SQLite automáticamente
-# para que puedas correr el proyecto sin tener Postgres instalado todavía.
-if os.getenv("DB_NAME"):
+# Railway inyecta DATABASE_URL automáticamente al agregar Postgres.
+# Si no existe (desarrollo local), usa las variables sueltas o SQLite.
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    }
+elif os.getenv("DB_NAME"):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -89,8 +109,7 @@ else:
     }
 
 # --------------------------------------------------------------------
-# Validación de contraseñas
-# --------------------------------------------------------------------
+# Validación de contraseñas-------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -98,36 +117,34 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# --------------------------------------------------------------------
-# Internacionalización
-# --------------------------------------------------------------------
+# Internacionalización-----------------------------------------------------
 LANGUAGE_CODE = "es-co"
 TIME_ZONE = "America/Bogota"
 USE_I18N = True
 USE_TZ = True
 
-# --------------------------------------------------------------------
-# Archivos estáticos y de medios (fotos de mascotas, QR generados)
-# --------------------------------------------------------------------
+# Archivos estáticos y de medios----------------------------
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# --------------------------------------------------------------------
-# Redirecciones de autenticación (se usan en la Fase 3)
-# --------------------------------------------------------------------
+
+# Redirecciones de autenticación--------------------------------
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "pets:my_pets"
 LOGOUT_REDIRECT_URL = "home"
 
-# --------------------------------------------------------------------
-# Email (en desarrollo se imprime en la consola; en producción se
-# configura con las variables de entorno del proveedor real)
-# --------------------------------------------------------------------
+# Email -------------------
 if os.getenv("EMAIL_HOST"):
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = os.getenv("EMAIL_HOST")
@@ -135,10 +152,10 @@ if os.getenv("EMAIL_HOST"):
     EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
     EMAIL_USE_TLS = True
+    DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# Correo interno que recibe QR + datos de cada mascota aprobada
 ADMIN_NOTIFICATION_EMAIL = os.getenv("ADMIN_NOTIFICATION_EMAIL", "admin@idpetscan.com")
 
 WHATSAPP_BUSINESS_NUMBER = os.getenv("WHATSAPP_BUSINESS_NUMBER", "")
