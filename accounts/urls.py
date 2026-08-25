@@ -12,8 +12,9 @@ urlpatterns = [
 
     path("recuperar/", auth_views.PasswordResetView.as_view(
         template_name="accounts/password_reset.html",
-        email_template_name="accounts/password_reset_email.txt",
+        email_template_name="accounts/password_reset_email.html",
         subject_template_name="accounts/password_reset_subject.txt",
+        html_email_template_name="accounts/password_reset_email.html",
         success_url="/cuenta/recuperar/enviado/",
     ), name="password_reset"),
 
