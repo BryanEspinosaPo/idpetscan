@@ -41,9 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "cloudinary_storage",
     "django.contrib.staticfiles",
-    "cloudinary",
     "accounts",
     "pets",
     "orders",
@@ -132,22 +130,12 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
-CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
-if CLOUDINARY_CLOUD_NAME:
-    CLOUDINARY_STORAGE = {
-        "CLOUD_NAME": CLOUDINARY_CLOUD_NAME,
-        "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
-        "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
-    }
-    STORAGES["default"] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
