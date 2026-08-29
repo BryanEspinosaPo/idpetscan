@@ -18,7 +18,7 @@ def send_admin_notification(pet):
     email = EmailMessage(
         subject=subject,
         body=body,
-        to=[settings.ADMIN_NOTIFICATION_EMAIL],
+        to=[settings.PRODUCTION_NOTIFICATION_EMAIL],
     )
     if pet.qr_code:
         email.attach_file(pet.qr_code.path)

@@ -167,5 +167,6 @@ else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 ADMIN_NOTIFICATION_EMAIL = os.getenv("ADMIN_NOTIFICATION_EMAIL", "admin@idpetscan.com")
+PRODUCTION_NOTIFICATION_EMAIL = os.getenv("PRODUCTION_NOTIFICATION_EMAIL", "admin@idpetscan.com")
 
 WHATSAPP_BUSINESS_NUMBER = os.getenv("WHATSAPP_BUSINESS_NUMBER", "")
