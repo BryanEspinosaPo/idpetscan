@@ -5,6 +5,8 @@ from django.core.mail import EmailMessage
 def send_admin_notification(pet):
     subject = f"Nueva placa aprobada: {pet.name}"
     plan_line = f"Plan: {pet.order.get_plan_display()}\n" if pet.order else ""
+    qr_line = f"QR (descargar): {pet.qr_code.url}\n" if pet.qr_code else "QR: no generado\n"
+    photo_line = f"Foto: {pet.photo.url}\n" if pet.photo else ""
     body = (
         f"Mascota: {pet.name}\n"
         f"Especie: {pet.get_species_display()}\n"
@@ -13,6 +15,8 @@ def send_admin_notification(pet):
         f"Código público: {pet.public_code}\n"
         f"{plan_line}"
         f"Historia clínica incluida: {'Sí' if pet.clinical_history_enabled else 'No'}\n"
+        f"{qr_line}"
+        f"{photo_line}"
     )
 
     email = EmailMessage(
@@ -20,8 +24,6 @@ def send_admin_notification(pet):
         body=body,
         to=[settings.PRODUCTION_NOTIFICATION_EMAIL],
     )
-    if pet.qr_code:
-        email.attach_file(pet.qr_code.path)
     email.send(fail_silently=False)
 
 
