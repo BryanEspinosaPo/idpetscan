@@ -1,15 +1,18 @@
 import io
+import os
 
 import qrcode
 from django.core.files.base import ContentFile
 
 
-def generate_qr_for_pet(pet, base_url="http://127.0.0.1:8000"):
+def generate_qr_for_pet(pet, base_url=None):
     """
     Genera el QR que apunta al perfil público de la mascota y lo
     guarda directamente en el campo qr_code del modelo.
-    En producción, base_url debe ser "https://idpetscan.com".
     """
+    if base_url is None:
+        base_url = os.getenv("SITE_BASE_URL", "http://127.0.0.1:8000")
+
     public_url = f"{base_url}/p/{pet.public_code}/"
 
     qr = qrcode.QRCode(box_size=10, border=2)
