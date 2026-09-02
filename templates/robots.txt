@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /panel/
+Disallow: /admin/
+Disallow: /cuenta/
+Disallow: /mis-mascotas/
+Disallow: /ordenes/
+
+Sitemap: https://idpetscan.com/sitemap.xml

@@ -8,6 +8,9 @@ from pets.views import home_view
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home_view, name="home"),
+    path("robots.txt", TemplateView.as_view(
+        template_name="robots.txt", content_type="text/plain",
+    ), name="robots_txt"),
     path("politica-de-datos/", TemplateView.as_view(
         template_name="legal/politica_datos.html",
         extra_context={"admin_email": settings.ADMIN_NOTIFICATION_EMAIL},

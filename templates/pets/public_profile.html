@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+
+{% block page_title %}{% if pet.is_lost %}🚨 PERDIDO: {{ pet.name }} — Ayúdanos a encontrarlo{% else %}{{ pet.name }} — Perfil en IDPetScan{% endif %}{% endblock %}
+{% block meta_description %}{% if pet.is_lost %}{{ pet.name }} se perdió{% if pet.last_seen_location %} cerca de {{ pet.last_seen_location }}{% endif %}. Si lo ves, contacta a su dueño desde este perfil.{% else %}Perfil digital de {{ pet.name }}, {{ pet.get_species_display|lower }}{% if pet.breed %} ({{ pet.breed }}){% endif %}. Escanea el QR de su placa para contactar a su dueño.{% endif %}{% endblock %}
+{% block og_image %}{% if pet.photo %}{{ pet.photo.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+
 {% block content %}
 <div class="profile-page">
   <div class="profile-wrapper">

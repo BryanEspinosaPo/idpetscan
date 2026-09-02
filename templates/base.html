@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  {% load static %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IDPetScan</title>
+
+  <title>{% block page_title %}IDPetScan — Identidad digital para mascotas{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Coloca una placa con código QR en tu mascota. Si se pierde, cualquiera que la encuentre puede contactarte al instante. Perfil digital, historia clínica y ubicación en un solo lugar.{% endblock %}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+  <meta name="theme-color" content="#0D1B2A">
+
+  <!-- Open Graph / WhatsApp / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="IDPetScan">
+  <meta property="og:title" content="{% block og_title %}{{ self.page_title }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ self.meta_description }}{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo-horizontal.png' %}{% endblock %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:locale" content="es_CO">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ self.og_title }}">
+  <meta name="twitter:description" content="{{ self.og_description }}">
+  <meta name="twitter:image" content="{{ self.og_image }}">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-  {% load static %}
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
   <link rel="icon" type="image/png" href="{% static 'img/logo-mark.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/logo-mark.png' %}">
 </head>
 <body>
 
