@@ -2,6 +2,8 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 
+from pets.emails import send_welcome_email
+
 from .forms import RegisterForm
 
 
@@ -19,6 +21,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # inicia sesión automáticamente tras registrarse
+            send_welcome_email(user)
             return redirect("home")
     else:
         form = RegisterForm()

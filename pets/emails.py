@@ -59,3 +59,17 @@ def send_renewal_reminder_email(pet):
     )
     if pet.contact_email:
         EmailMessage(subject=subject, body=body, to=[pet.contact_email]).send(fail_silently=True)
+
+
+def send_welcome_email(user):
+    subject = "¡Bienvenido a IDPetScan! 🐾"
+    body = (
+        f"Hola {user.username},\n\n"
+        f"Gracias por crear tu cuenta en IDPetScan.\n\n"
+        f"Ahora puedes elegir un plan y registrar la placa de tu mascota:\n"
+        f"https://idpetscan.com/ordenes/planes/\n\n"
+        f"Cualquier duda, escríbenos por WhatsApp.\n\n"
+        f"— El equipo de IDPetScan"
+    )
+    if user.email:
+        EmailMessage(subject=subject, body=body, to=[user.email]).send(fail_silently=True)
